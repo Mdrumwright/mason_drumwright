@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Projects — Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0f1c; --surface: #101a2f; --surface-2: #16223b;
+    --line: rgba(128,150,190,0.16); --line-strong: rgba(128,150,190,0.30);
+    --text: #d5dcea; --muted: #8794ab; --faint: #5f6c85;
+    --accent: #5cc8e0; --accent-2: #86dcef; --good: #5ecb8c;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+    --maxw: 1000px; --pad: clamp(20px, 5vw, 64px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #e9edf4; --surface: #ffffff; --surface-2: #f3f6fb;
+      --line: rgba(30,55,100,0.14); --line-strong: rgba(30,55,100,0.26);
+      --text: #172038; --muted: #52607c; --faint: #7d8aa3;
+      --accent: #0e7f9e; --accent-2: #0b6b86; --good: #1c945a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-sans);
+    line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  a { color: var(--accent); text-decoration: none; }
+
+  .topbar { border-bottom: 1px solid var(--line); }
+  .topbar .wrap { padding-block: 14px; font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .topbar a { color: var(--muted); } .topbar a:hover { color: var(--accent); }
+
+  header.page { padding-block: clamp(40px, 7vw, 72px) 8px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 660; letter-spacing: -0.02em; margin: 0; }
+  .sub { color: var(--muted); margin-top: 14px; max-width: 56ch; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; padding-block: 40px 72px; }
+  .proj { display: block; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 24px; transition: transform .14s ease, border-color .14s ease; }
+  .proj:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .proj .thumb { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 18px; background:#fff; }
+  .proj .thumb img { width: 100%; height: 160px; object-fit: cover; object-position: top; display: block; }
+  .proj .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); }
+  .proj h2 { font-size: 1.25rem; font-weight: 640; letter-spacing: -0.01em; margin: 8px 0 8px; color: var(--text); }
+  .proj p { color: var(--muted); font-size: 0.95rem; margin: 0 0 16px; }
+  .proj .go { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .chip { font-family: var(--font-mono); font-size: 10.5px; color: var(--faint);
+    border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; }
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap"><a href="index.html">← Home</a></div></div>
+
+  <header class="page"><div class="wrap">
+    <p class="eyebrow">Selected Work</p>
+    <h1>Projects</h1>
+    <p class="sub">Systems I've designed and built end to end — hardware, firmware, and the control theory that ties them together.</p>
+  </div></header>
+
+  <div class="wrap"><div class="grid">
+    <a class="proj" href="autopilot.html">
+      <div class="thumb"><img src="images/SensorMovement.png" alt="Fixed-wing autopilot sensor data" /></div>
+      <span class="tag">Aerospace · Controls · Embedded</span>
+      <h2>Fixed-Wing Autopilot</h2>
+      <div class="stack">
+        <span class="chip">Teensy 4.1</span><span class="chip">C++</span>
+        <span class="chip">15-state EKF</span><span class="chip">MATLAB 6-DOF</span>
+      </div>
+      <p>A from-scratch flight-control system for a hand-launched RC airplane — a 15-state estimator, cascade PID, and autonomous loiter, validated in simulation and flown.</p>
+      <span class="go">View project →</span>
+    </a>
+
+    <!-- Add more projects by copying an <a class="proj"> ... </a> block. -->
+  </div></div>
+</body>
+</html>

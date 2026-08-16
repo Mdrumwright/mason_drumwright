@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fixed-Wing Autopilot — Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0f1c; --surface: #101a2f; --surface-2: #16223b;
+    --line: rgba(128,150,190,0.16); --line-strong: rgba(128,150,190,0.30);
+    --text: #d5dcea; --muted: #8794ab; --faint: #5f6c85;
+    --accent: #5cc8e0; --accent-2: #86dcef; --amber: #ecab4e; --good: #5ecb8c;
+    --sky: #2b4c78; --ground: #3a2f22;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+    --maxw: 1080px; --pad: clamp(20px, 5vw, 64px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #e9edf4; --surface: #ffffff; --surface-2: #f3f6fb;
+      --line: rgba(30,55,100,0.14); --line-strong: rgba(30,55,100,0.26);
+      --text: #172038; --muted: #52607c; --faint: #7d8aa3;
+      --accent: #0e7f9e; --accent-2: #0b6b86; --amber: #b0761c; --good: #1c945a;
+      --sky: #b9d3ef; --ground: #d8c3a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); line-height: 1.65; font-size: 17px;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 650; letter-spacing: -0.02em; line-height: 1.12; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin: 0; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .topbar { border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); }
+  .topbar strong { color: var(--text); font-weight: 600; }
+  .topbar .dot { color: var(--good); }
+
+  .hero { padding-block: clamp(48px, 8vw, 96px) clamp(40px, 6vw, 72px); }
+  .hero-grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin-top: 18px; }
+  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 34ch; margin-top: 22px; line-height: 1.55; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 40px;
+    background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .stat { background: var(--surface); padding: 16px 18px; }
+  .stat .v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.5rem;
+    color: var(--accent); font-weight: 500; }
+  .stat .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); margin-top: 4px; }
+
+  .adi-wrap { display: flex; justify-content: center; }
+  .adi { width: min(320px, 72vw); aspect-ratio: 1; border-radius: 50%; position: relative; padding: 14px;
+    background: radial-gradient(circle at 50% 38%, var(--surface-2), var(--surface));
+    border: 1px solid var(--line-strong); box-shadow: 0 30px 60px -30px rgba(0,0,0,0.7); }
+  .adi svg { width: 100%; height: 100%; }
+  .horizon { transform-box: fill-box; transform-origin: center; animation: fly 16s ease-in-out infinite alternate; }
+  @keyframes fly { 0%{transform:rotate(-11deg) translateY(-9px)} 30%{transform:rotate(6deg) translateY(5px)}
+    55%{transform:rotate(-3deg) translateY(-2px)} 80%{transform:rotate(9deg) translateY(8px)} 100%{transform:rotate(-7deg) translateY(-6px)} }
+  @media (prefers-reduced-motion: reduce) { .horizon { animation: none; transform: rotate(-6deg) translateY(-4px); } }
+
+  section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 26px; flex-wrap: wrap; }
+  .sec-head .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  .sec-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+  .prose p { max-width: 66ch; } .prose p + p { margin-top: 1em; }
+  .prose strong { color: var(--text); font-weight: 640; }
+  .lead { color: var(--muted); max-width: 66ch; font-size: 1.08rem; }
+
+  figure { margin: 26px 0 0; }
+  figure img { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  figcaption { font-family: var(--font-mono); font-size: 12px; color: var(--faint); margin-top: 10px; }
+
+  .grid { display: grid; gap: 16px; margin-top: 22px; }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .card .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 12px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.96rem; margin: 0; }
+
+  .spec { display: grid; grid-template-columns: max-content 1fr; margin-top: 22px;
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .spec > div { padding: 13px 18px; border-top: 1px solid var(--line); }
+  .spec > div:nth-child(-n+2) { border-top: none; }
+  .spec .sk { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); background: var(--surface); white-space: nowrap; }
+  .spec .sv { background: var(--surface-2); font-size: 0.96rem; } .spec .sv b { color: var(--accent); }
+
+  ul.ticks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; max-width: 66ch; }
+  ul.ticks li { padding-left: 26px; position: relative; }
+  ul.ticks li::before { content: "▸"; position: absolute; left: 4px; color: var(--accent); }
+  ul.ticks b { font-weight: 620; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 40px 56px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; } .adi-wrap { order: -1; }
+    .grid.three { grid-template-columns: 1fr; } .spec { grid-template-columns: 1fr; }
+    .spec .sk { border-top: 1px solid var(--line); } .spec > div:nth-child(2) { border-top: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap">
+    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Fixed-Wing Autopilot</strong></span>
+    <span><span class="dot">●</span> Status: Flight-test</span>
+  </div></div>
+
+  <header class="hero"><div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Embedded Systems · Control · Aerospace</p>
+      <h1>A fixed-wing autopilot, built from the silicon up.</h1>
+      <p class="lede">Custom flight-control firmware and a 15-state estimator that turn a hand-launched RC airplane into an autonomous aircraft — designed and validated in a 6-DOF simulation, then built and flown on hardware I assembled and debugged myself.</p>
+      <div class="stats">
+        <div class="stat"><div class="v">15</div><div class="k">EKF states</div></div>
+        <div class="stat"><div class="v">100<span style="font-size:.7em"> Hz</span></div><div class="k">Control loop</div></div>
+        <div class="stat"><div class="v">9<span style="font-size:.7em">-DOF</span></div><div class="k">Sensing</div></div>
+        <div class="stat"><div class="v">~500<span style="font-size:.7em"> g</span></div><div class="k">All-up weight</div></div>
+        <div class="stat"><div class="v">3</div><div class="k">Flight modes</div></div>
+        <div class="stat"><div class="v">0</div><div class="k">Off-the-shelf FCs</div></div>
+      </div>
+    </div>
+    <div class="adi-wrap"><div class="adi">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs><clipPath id="ball"><circle cx="100" cy="100" r="86"/></clipPath></defs>
+        <g clip-path="url(#ball)"><g class="horizon">
+          <rect x="-80" y="-80" width="360" height="180" fill="var(--sky)"/>
+          <rect x="-80" y="100" width="360" height="200" fill="var(--ground)"/>
+          <line x1="-80" y1="100" x2="280" y2="100" stroke="var(--accent-2)" stroke-width="2.2"/>
+          <g stroke="var(--accent-2)" stroke-width="1.2" opacity="0.85">
+            <line x1="82" y1="70" x2="118" y2="70"/><line x1="90" y1="85" x2="110" y2="85"/>
+            <line x1="90" y1="115" x2="110" y2="115"/><line x1="82" y1="130" x2="118" y2="130"/>
+          </g>
+        </g></g>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="var(--line-strong)" stroke-width="1.5"/>
+        <g stroke="var(--text)" stroke-width="3" stroke-linecap="round">
+          <line x1="64" y1="100" x2="86" y2="100"/><line x1="114" y1="100" x2="136" y2="100"/></g>
+        <circle cx="100" cy="100" r="3" fill="var(--amber)"/>
+        <polygon points="100,20 95,30 105,30" fill="var(--amber)"/>
+      </svg>
+    </div></div>
+  </div></header>
+
+  <div class="wrap">
+    <section id="overview">
+      <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
+      <div class="prose">
+        <p>The goal was simple to state and hard to earn: take an ordinary foam RC plane and make it fly itself — <strong>without</strong> reaching for an off-the-shelf flight controller like a Pixhawk. Every layer, from the state estimator to the servo mixing, is code I wrote and reasoned about.</p>
+        <p>The project has two halves that share the same math. A <strong>MATLAB 6-DOF simulation</strong> models the aircraft as a rigid body and runs the estimator, controllers, and guidance in the loop — the place to design and de-risk before anything leaves the ground. Then <strong>C++ firmware on a Teensy 4.1</strong> runs that same estimator and those same control laws at 100&nbsp;Hz against real sensors, servos, and a live radio link.</p>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="sec-head"><span class="idx">02</span><h2>System architecture</h2></div>
+      <p class="lead">A single 100&nbsp;Hz pipeline: raw sensors are fused into one state estimate, which the cascade controllers turn into surface and throttle commands. The RC link rides on top as command input and a hardware safety tether.</p>
+      <figure><img src="images/SystemArch.png" alt="Flight-control pipeline: sensors → EKF → control → actuators, with the RC link." />
+        <figcaption>The flight-control pipeline — sensors through the estimator and controllers to the actuators, with a deadman failsafe on the RC link.</figcaption></figure>
+    </section>
+
+    <section id="estimation">
+      <div class="sec-head"><span class="idx">03</span><h2>State estimation — the EKF</h2></div>
+      <p class="lead">A 15-state Extended Kalman Filter fuses a 9-DOF IMU, barometer, magnetometer, and GPS into a complete navigation solution — and, just as importantly, holds together when the flight gets rough.</p>
+      <div class="grid three">
+        <div class="card"><span class="tag">The state</span><h3>Fifteen states</h3><p>NED position and velocity, Euler attitude, and live gyro &amp; accelerometer bias estimates — so drift is observed and removed, not trusted.</p></div>
+        <div class="card"><span class="tag">The fusion</span><h3>Multi-rate sensors</h3><p>Gyro/accel drive the prediction; baro, magnetometer, and GPS correct it at their own rates, each with its own measurement model and gating.</p></div>
+        <div class="card"><span class="tag">The hard part</span><h3>It cannot die</h3><p>Joseph-form covariance updates keep the filter positive-definite, a guard tames the Euler pitch singularity, and a divergence check scrubs any NaN so a transient can't brick the estimator mid-air.</p></div>
+      </div>
+      <div class="prose" style="margin-top:22px"><p>That last card is the story of the project in miniature: a textbook EKF that worked on the desk <em>diverged to NaN</em> the first time the airframe was shaken hard. Root-causing it — a covariance drifting non-positive-definite, compounded by gimbal lock — and hardening the filter against it was the difference between a demo and something I'd trust over a field.</p></div>
+    </section>
+
+    <section id="control">
+      <div class="sec-head"><span class="idx">04</span><h2>Control system</h2></div>
+      <p class="lead">A cascaded PID architecture: an outer attitude loop sets the target for an inner angular-rate loop that drives the surfaces. Altitude commands pitch; airspeed plus a climb feedforward commands throttle.</p>
+      <figure><img src="images/PidLoops.png" alt="Cascade PID: outer attitude loop feeds an inner rate loop, closed on the EKF estimate." />
+        <figcaption>Cascade PID — the outer attitude loop sets the rate target for the inner rate loop, both closed on the EKF state estimate.</figcaption></figure>
+      <div class="grid three">
+        <div class="card"><span class="tag">Mode 01</span><h3>Manual</h3><p>Direct radio passthrough with correct surface mixing and per-servo trim.</p></div>
+        <div class="card"><span class="tag">Mode 02</span><h3>Hold / Loiter</h3><p>Captures the current altitude and airspeed and orbits a GPS-anchored circle autonomously.</p></div>
+        <div class="card"><span class="tag">Mode 03</span><h3>Guidance</h3><p>Bank-to-turn navigation — circular loiter and return-to-launch, validated in simulation.</p></div>
+      </div>
+      <ul class="ticks">
+        <li><b>Arming interlock</b> — the motor is disarmed at power-up and only lives behind a deliberate switch sequence.</li>
+        <li><b>Link failsafe</b> — loss of the radio for half a second cuts the throttle and safes the surfaces.</li>
+        <li><b>Ground gating</b> — integrators are frozen and the throttle idled until the aircraft is actually flying.</li>
+      </ul>
+    </section>
+
+    <section id="simulation">
+      <div class="sec-head"><span class="idx">05</span><h2>Simulation-first design</h2></div>
+      <div class="prose">
+        <p>Nothing was tuned by crashing hardware. The full stack first ran in a <strong>MATLAB 6-DOF simulation</strong> — a rigid-body aircraft model, a trim solver for the cruise operating point, and the same EKF, controllers, and guidance flying a virtual airframe.</p>
+        <p>The sim tuned the gains, exercised the loiter and return-to-launch guidance, and answered the questions you don't want to discover in the air. One example: across the entire flight envelope the control surfaces needed only about <strong>5° of the 25° available</strong> — confirming enormous control-authority margin before the first hand-launch.</p>
+      </div>
+    </section>
+
+    <section id="hardware">
+      <div class="sec-head"><span class="idx">06</span><h2>Hardware</h2></div>
+      <p class="lead">A deliberately minimal, hand-assembled avionics stack — every wire, joint, and calibration done and understood by hand.</p>
+      <div class="spec">
+        <div class="sk">Compute</div><div class="sv"><b>Teensy 4.1</b> — 600 MHz Cortex-M7, C++ / PlatformIO</div>
+        <div class="sk">Inertial</div><div class="sv"><b>ICM-20948</b> 9-DOF IMU (accel · gyro · magnetometer)</div>
+        <div class="sk">Air data</div><div class="sv"><b>BMP280</b> barometric altimeter</div>
+        <div class="sk">Position</div><div class="sv"><b>ATGM336H</b> GNSS receiver</div>
+        <div class="sk">Radio</div><div class="sv"><b>ExpressLRS</b> — RadioMaster Pocket + RP1, CRSF</div>
+        <div class="sk">Airframe</div><div class="sv"><b>~500 g</b> hand-built foam wing · CG at quarter-chord · hand-launched</div>
+        <div class="sk">Actuation</div><div class="sv">Elevator / aileron / rudder servos · brushless motor + ESC</div>
+      </div>
+    </section>
+
+    <section id="testing">
+      <div class="sec-head"><span class="idx">07</span><h2>Calibration &amp; flight test</h2></div>
+      <p class="lead">Resolved the IMU frame from first principles, calibrated the magnetometer, verified every control-surface direction and the failsafe on the bench — then flew it.</p>
+      <figure><img src="images/SensorMovement.png" alt="Bench movement test: raw accelerometer and gyro with the fused attitude estimate." />
+        <figcaption>Bench movement test — raw accelerometer (top) and gyro (middle) as the airframe is tilted through roll, pitch, and yaw, with the resulting fused attitude estimate (bottom). The estimator tracks large motion cleanly with no divergence.</figcaption></figure>
+      <div class="prose" style="margin-top:22px"><p>The aircraft has <strong>flown under manual control</strong>, responding correctly to every input — validating the airframe, CG, and control directions in the air. The autopilot modes are being brought online on a conservative progression: manual, then hold at altitude, then fully autonomous.</p></div>
+    </section>
+
+    <section id="lessons">
+      <div class="sec-head"><span class="idx">08</span><h2>What broke, and what I learned</h2></div>
+      <ul class="ticks">
+        <li><b>An intermittent IMU</b> traced not to my wiring — which ohmed out clean — but to a cracked factory solder joint <em>under</em> the chip, found by watching it drop off the bus when pressed.</li>
+        <li><b>The estimator that diverged</b> — the EKF NaN'd on hard motion and never recovered, until Joseph-form math, a singularity guard, and a divergence recovery made it self-heal.</li>
+        <li><b>Fail-safe by construction</b> — a dead barometer once fed a NaN straight into the filter; now every sensor is optional and every reading validated, so a missing sensor degrades the system instead of crashing it.</li>
+      </ul>
+    </section>
+
+    <section id="future">
+      <div class="sec-head"><span class="idx">09</span><h2>Where it goes next</h2></div>
+      <ul class="ticks">
+        <li>A custom PCB to replace the hand-wired avionics and place the magnetometer clear of the motor and battery.</li>
+        <li>TECS total-energy control coupling pitch and throttle.</li>
+        <li>Waypoint navigation, onboard telemetry logging, and the maiden autonomous flight.</li>
+      </ul>
+    </section>
+  </div>
+
+  <footer><div class="wrap">
+    <span>Fixed-Wing Autopilot · Teensy + MATLAB</span>
+    <span>Mason Drumwright · Design · Firmware · Controls</span>
+  </div></footer>
+</body>
+</html>

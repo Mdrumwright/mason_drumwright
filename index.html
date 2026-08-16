@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0f1c; --surface: #101a2f; --surface-2: #16223b;
+    --line: rgba(128,150,190,0.16); --line-strong: rgba(128,150,190,0.30);
+    --text: #d5dcea; --muted: #8794ab; --faint: #5f6c85;
+    --accent: #5cc8e0; --accent-2: #86dcef; --amber: #ecab4e; --good: #5ecb8c;
+    --sky: #2b4c78; --ground: #3a2f22;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #e9edf4; --surface: #ffffff; --surface-2: #f3f6fb;
+      --line: rgba(30,55,100,0.14); --line-strong: rgba(30,55,100,0.26);
+      --text: #172038; --muted: #52607c; --faint: #7d8aa3;
+      --accent: #0e7f9e; --accent-2: #0b6b86; --amber: #b0761c; --good: #1c945a;
+      --sky: #b9d3ef; --ground: #d8c3a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased;
+    display: grid; place-items: center; padding: 32px; }
+  .card { width: 100%; max-width: 620px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 18px; }
+  h1 { font-size: clamp(2.4rem, 8vw, 3.6rem); font-weight: 660; letter-spacing: -0.03em;
+    line-height: 1.05; margin: 0; text-wrap: balance; }
+  .bio { color: var(--muted); font-size: 1.12rem; line-height: 1.6; margin: 24px 0 0; max-width: 52ch; }
+  .bio strong { color: var(--text); font-weight: 620; }
+
+  .buttons { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px;
+    border-radius: 10px; font-weight: 600; font-size: 1rem; text-decoration: none;
+    border: 1px solid var(--line-strong); transition: transform .12s ease, border-color .12s ease, background .12s ease; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-primary { background: var(--accent); color: #06121a; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .btn-ghost { color: var(--text); background: var(--surface); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn svg { width: 17px; height: 17px; }
+
+  .foot { margin-top: 44px; font-family: var(--font-mono); font-size: 11.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+  .foot .dot { color: var(--good); }
+</style>
+</head>
+<body>
+  <main class="card">
+    <p class="eyebrow">Embedded Systems · Control · Aerospace</p>
+    <h1>Mason Drumwright</h1>
+    <p class="bio">
+      I build complete systems end to end — from the sensor fusion up to the control laws and the firmware that runs them. I'm drawn to <strong>guidance, navigation &amp; control</strong>, embedded systems, and aerospace. Most recently I designed, simulated in 6-DOF, and flew a <strong>custom fixed-wing autopilot</strong>, writing the 15-state estimator, cascade controllers, and Teensy firmware from scratch.
+      <!-- Edit this bio: add your school/role, what you're looking for, and anything else about you. -->
+    </p>
+
+    <nav class="buttons">
+      <a class="btn btn-primary" href="projects.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h5l2 2h11v10H3z"/></svg>
+        Projects
+      </a>
+      <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg>
+        Resume
+      </a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4"/></svg>
+        LinkedIn
+      </a>
+    </nav>
+
+    <p class="foot"><span class="dot">●</span> Available for opportunities</p>
+  </main>
+</body>
+</html>
