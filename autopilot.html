@@ -6,22 +6,22 @@
 <title>Fixed-Wing Autopilot — Mason Drumwright</title>
 <style>
   :root {
-    --bg: #0a0f1c; --surface: #101a2f; --surface-2: #16223b;
-    --line: rgba(128,150,190,0.16); --line-strong: rgba(128,150,190,0.30);
-    --text: #d5dcea; --muted: #8794ab; --faint: #5f6c85;
-    --accent: #5cc8e0; --accent-2: #86dcef; --amber: #ecab4e; --good: #5ecb8c;
-    --sky: #2b4c78; --ground: #3a2f22;
+    --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
+    --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
+    --accent: #ffffff; --accent-2: #cfcfcf; --amber: #ededed; --good: #cfcfcf;
+    --sky: #3a3a3a; --ground: #1a1a1a;
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
     --maxw: 1080px; --pad: clamp(20px, 5vw, 64px);
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg: #e9edf4; --surface: #ffffff; --surface-2: #f3f6fb;
-      --line: rgba(30,55,100,0.14); --line-strong: rgba(30,55,100,0.26);
-      --text: #172038; --muted: #52607c; --faint: #7d8aa3;
-      --accent: #0e7f9e; --accent-2: #0b6b86; --amber: #b0761c; --good: #1c945a;
-      --sky: #b9d3ef; --ground: #d8c3a0;
+      --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+      --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
+      --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
+      --accent: #000000; --accent-2: #333333; --amber: #222222; --good: #333333;
+      --sky: #d0d0d0; --ground: #a0a0a0;
     }
   }
   * { box-sizing: border-box; }
@@ -45,9 +45,9 @@
   .topbar .dot { color: var(--good); }
 
   .hero { padding-block: clamp(48px, 8vw, 96px) clamp(40px, 6vw, 72px); }
-  .hero-grid { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
-  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin-top: 18px; }
-  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 34ch; margin-top: 22px; line-height: 1.55; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(28px, 4vw, 44px); }
+  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 52ch; margin-top: 0; line-height: 1.55; }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 40px;
     background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
   .stat { background: var(--surface); padding: 16px 18px; }
@@ -56,15 +56,9 @@
   .stat .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--faint); margin-top: 4px; }
 
-  .adi-wrap { display: flex; justify-content: center; }
-  .adi { width: min(320px, 72vw); aspect-ratio: 1; border-radius: 50%; position: relative; padding: 14px;
-    background: radial-gradient(circle at 50% 38%, var(--surface-2), var(--surface));
+  .hero-photo { display: flex; justify-content: center; }
+  .hero-photo img { width: 100%; max-width: 600px; border-radius: 16px;
     border: 1px solid var(--line-strong); box-shadow: 0 30px 60px -30px rgba(0,0,0,0.7); }
-  .adi svg { width: 100%; height: 100%; }
-  .horizon { transform-box: fill-box; transform-origin: center; animation: fly 16s ease-in-out infinite alternate; }
-  @keyframes fly { 0%{transform:rotate(-11deg) translateY(-9px)} 30%{transform:rotate(6deg) translateY(5px)}
-    55%{transform:rotate(-3deg) translateY(-2px)} 80%{transform:rotate(9deg) translateY(8px)} 100%{transform:rotate(-7deg) translateY(-6px)} }
-  @media (prefers-reduced-motion: reduce) { .horizon { animation: none; transform: rotate(-6deg) translateY(-4px); } }
 
   section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
   .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 26px; flex-wrap: wrap; }
@@ -77,6 +71,8 @@
   figure { margin: 26px 0 0; }
   figure img { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
   figcaption { font-family: var(--font-mono); font-size: 12px; color: var(--faint); margin-top: 10px; }
+  .figrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 26px; }
+  .figrid figure { margin: 0; }
 
   .grid { display: grid; gap: 16px; margin-top: 22px; }
   .grid.three { grid-template-columns: repeat(3, 1fr); }
@@ -104,8 +100,9 @@
     font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 
   @media (max-width: 780px) {
-    .hero-grid { grid-template-columns: 1fr; } .adi-wrap { order: -1; }
+    .hero-grid { grid-template-columns: 1fr; }
     .grid.three { grid-template-columns: 1fr; } .spec { grid-template-columns: 1fr; }
+    .figrid { grid-template-columns: 1fr; }
     .spec .sk { border-top: 1px solid var(--line); } .spec > div:nth-child(2) { border-top: none; }
   }
 </style>
@@ -113,140 +110,153 @@
 <body>
   <div class="topbar"><div class="wrap">
     <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Fixed-Wing Autopilot</strong></span>
-    <span><span class="dot">●</span> Status: Flight-test</span>
   </div></div>
 
-  <header class="hero"><div class="wrap hero-grid">
-    <div>
-      <p class="eyebrow">Embedded Systems · Control · Aerospace</p>
-      <h1>A fixed-wing autopilot, built from the silicon up.</h1>
-      <p class="lede">Custom flight-control firmware and a 15-state estimator that turn a hand-launched RC airplane into an autonomous aircraft — designed and validated in a 6-DOF simulation, then built and flown on hardware I assembled and debugged myself.</p>
-      <div class="stats">
-        <div class="stat"><div class="v">15</div><div class="k">EKF states</div></div>
-        <div class="stat"><div class="v">100<span style="font-size:.7em"> Hz</span></div><div class="k">Control loop</div></div>
-        <div class="stat"><div class="v">9<span style="font-size:.7em">-DOF</span></div><div class="k">Sensing</div></div>
-        <div class="stat"><div class="v">~500<span style="font-size:.7em"> g</span></div><div class="k">All-up weight</div></div>
-        <div class="stat"><div class="v">3</div><div class="k">Flight modes</div></div>
-        <div class="stat"><div class="v">0</div><div class="k">Off-the-shelf FCs</div></div>
-      </div>
+  <header class="hero"><div class="wrap">
+    <h1>Custom Fixed Wing Autopilot</h1>
+    <div class="hero-grid">
+      <p class="lede">This project includes the design, build, and testing of a custom fixed-wing RC aircraft. The plane was designed using a MATLAB simulation built from scratch to analyze performance and compare aircraft geometries. This simulation also tested the capability of the PID control loops that allow for autonomous flight control. The onboard software was built in C++ and run on a Teensy 4.1. This includes a 15-state Extended Kalman Filter and PID control for maintaining altitude, airspeed, level flight, and guidance maneuvers. The sensors include a 9-DOF IMU, barometer, and GPS. The work spans control theory, state estimation, sensor calibration, testing, and hardware assembly.</p>
+    <div class="hero-photo">
+      <img src="images/flying_plane.PNG" alt="Flying the custom RC aircraft in a field, the plane visible in the sky over the mountains." />
     </div>
-    <div class="adi-wrap"><div class="adi">
-      <svg viewBox="0 0 200 200" aria-hidden="true">
-        <defs><clipPath id="ball"><circle cx="100" cy="100" r="86"/></clipPath></defs>
-        <g clip-path="url(#ball)"><g class="horizon">
-          <rect x="-80" y="-80" width="360" height="180" fill="var(--sky)"/>
-          <rect x="-80" y="100" width="360" height="200" fill="var(--ground)"/>
-          <line x1="-80" y1="100" x2="280" y2="100" stroke="var(--accent-2)" stroke-width="2.2"/>
-          <g stroke="var(--accent-2)" stroke-width="1.2" opacity="0.85">
-            <line x1="82" y1="70" x2="118" y2="70"/><line x1="90" y1="85" x2="110" y2="85"/>
-            <line x1="90" y1="115" x2="110" y2="115"/><line x1="82" y1="130" x2="118" y2="130"/>
-          </g>
-        </g></g>
-        <circle cx="100" cy="100" r="86" fill="none" stroke="var(--line-strong)" stroke-width="1.5"/>
-        <g stroke="var(--text)" stroke-width="3" stroke-linecap="round">
-          <line x1="64" y1="100" x2="86" y2="100"/><line x1="114" y1="100" x2="136" y2="100"/></g>
-        <circle cx="100" cy="100" r="3" fill="var(--amber)"/>
-        <polygon points="100,20 95,30 105,30" fill="var(--amber)"/>
-      </svg>
-    </div></div>
+    </div>
   </div></header>
 
   <div class="wrap">
     <section id="overview">
       <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
       <div class="prose">
-        <p>The goal was simple to state and hard to earn: take an ordinary foam RC plane and make it fly itself — <strong>without</strong> reaching for an off-the-shelf flight controller like a Pixhawk. Every layer, from the state estimator to the servo mixing, is code I wrote and reasoned about.</p>
-        <p>The project has two halves that share the same math. A <strong>MATLAB 6-DOF simulation</strong> models the aircraft as a rigid body and runs the estimator, controllers, and guidance in the loop — the place to design and de-risk before anything leaves the ground. Then <strong>C++ firmware on a Teensy 4.1</strong> runs that same estimator and those same control laws at 100&nbsp;Hz against real sensors, servos, and a live radio link.</p>
+        <p>The goal of this project was to build a working fixed-wing autopilot entirely by myself rather than integrating an existing flight controller. The success criteria are as follows:</p>
+      </div>
+      <ul class="ticks">
+        <li><b>A trustworthy state estimator</b>: produces attitude, heading, altitude, airspeed, and position from low-cost sensors.</li>
+        <li><b>A capable control system</b>: holds attitude, altitude, heading, and airspeed, and follows simple guidance (climb, loiter).</li>
+        <li><b>Flight-safe firmware</b>: robust and safe enough to fly, including safe motor arming and a radio failsafe.</li>
+        <li><b>Simulation-first validation</b>: the design is validated rigorously in simulation before risking hardware.</li>
+      </ul>
+      <div class="prose" style="margin-top:22px">
+        <p>The project is essentially split into two parts: A MATLAB simulation to design and validate, and a flight firmware that mirrors the simulation.</p>
       </div>
     </section>
 
     <section id="architecture">
       <div class="sec-head"><span class="idx">02</span><h2>System architecture</h2></div>
-      <p class="lead">A single 100&nbsp;Hz pipeline: raw sensors are fused into one state estimate, which the cascade controllers turn into surface and throttle commands. The RC link rides on top as command input and a hardware safety tether.</p>
+      <p class="lead">The system is a single control pipeline running at 100 Hz</p>
       <figure><img src="images/SystemArch.png" alt="Flight-control pipeline: sensors → EKF → control → actuators, with the RC link." />
-        <figcaption>The flight-control pipeline — sensors through the estimator and controllers to the actuators, with a deadman failsafe on the RC link.</figcaption></figure>
+        <figcaption>The flight-control pipeline</figcaption></figure>
+      <p class="prose">Overlaid on this is an RC link (Express LRS) which allows for manual control from a Radiomaster controller and acts as a hardware safety barrier because a loss of link triggers a failsafe that cuts the motor.</p>
     </section>
 
     <section id="estimation">
-      <div class="sec-head"><span class="idx">03</span><h2>State estimation — the EKF</h2></div>
-      <p class="lead">A 15-state Extended Kalman Filter fuses a 9-DOF IMU, barometer, magnetometer, and GPS into a complete navigation solution — and, just as importantly, holds together when the flight gets rough.</p>
+      <div class="sec-head"><span class="idx">03</span><h2>State estimation</h2></div>
+      <p class="lead">The most important part of this project is the state estimation, done using a 15-state Extended Kalman Filter.</p>
       <div class="grid three">
-        <div class="card"><span class="tag">The state</span><h3>Fifteen states</h3><p>NED position and velocity, Euler attitude, and live gyro &amp; accelerometer bias estimates — so drift is observed and removed, not trusted.</p></div>
-        <div class="card"><span class="tag">The fusion</span><h3>Multi-rate sensors</h3><p>Gyro/accel drive the prediction; baro, magnetometer, and GPS correct it at their own rates, each with its own measurement model and gating.</p></div>
-        <div class="card"><span class="tag">The hard part</span><h3>It cannot die</h3><p>Joseph-form covariance updates keep the filter positive-definite, a guard tames the Euler pitch singularity, and a divergence check scrubs any NaN so a transient can't brick the estimator mid-air.</p></div>
+        <div class="card"><span class="tag">The state</span><h3>Fifteen states</h3><p>NED position (3) and velocity (3), Euler attitude (3), and gyroscope bias (3) and accelerometer bias (3). Estimating the sensor biases as part of the state means drift is observed and accounted for.</p></div>
+        <div class="card"><span class="tag">Sensor fusion</span><h3>Multi-rate correction</h3><p>The gyroscope and accelerometer drive the prediction step while the barometer, magnetometer, and GPS correct it. Each has its own measurement model and gating — accelerometer updates are rejected during high rotation or when the specific force is far from 1&nbsp;g.</p></div>
+        <div class="card"><span class="tag">Robustness</span><h3>Three layers</h3><p>The original EKF worked on artificially generated readings but diverged to NaN on real hardware after disturbances on the bench. The filter now has three layers of protection.</p></div>
       </div>
-      <div class="prose" style="margin-top:22px"><p>That last card is the story of the project in miniature: a textbook EKF that worked on the desk <em>diverged to NaN</em> the first time the airframe was shaken hard. Root-causing it — a covariance drifting non-positive-definite, compounded by gimbal lock — and hardening the filter against it was the difference between a demo and something I'd trust over a field.</p></div>
+      <p class="lead" style="margin-top:26px">Finding the fixes for the divergence was one of the most valuable parts of the project. The three layers of protection are:</p>
+      <ul class="ticks">
+        <li><b>Joseph-form covariance updates</b> keep the covariance matrix symmetric and positive. The original short-form update was algebraically correct but numerically unstable — it drifted indefinitely under aggressive motion, producing a sign-flipped gain that blows the state up. The Joseph form is algebraically equal but a sum of two symmetric positive terms, so the covariance stays positive by construction.</li>
+        <li><b>An Euler singularity guard.</b> Near ±90° of pitch the tan&nbsp;θ and sec&nbsp;θ terms in the attitude propagation blow up (gimbal lock) and the covariance diverges. These terms are bounded so the filter stays finite.</li>
+        <li><b>A divergence recovery check.</b> If any state or covariance element becomes non-finite, the entire matrix is scrubbed and then re-inflated with high initial variances, so a transient can never permanently disable the estimator.</li>
+      </ul>
     </section>
 
     <section id="control">
       <div class="sec-head"><span class="idx">04</span><h2>Control system</h2></div>
-      <p class="lead">A cascaded PID architecture: an outer attitude loop sets the target for an inner angular-rate loop that drives the surfaces. Altitude commands pitch; airspeed plus a climb feedforward commands throttle.</p>
+      <p class="lead">The control system is a cascade PID design. The outer loop sets targets for inner angular-rate loops that drive the surfaces; an altitude loop commands pitch and an airspeed loop commands throttle.</p>
       <figure><img src="images/PidLoops.png" alt="Cascade PID: outer attitude loop feeds an inner rate loop, closed on the EKF estimate." />
-        <figcaption>Cascade PID — the outer attitude loop sets the rate target for the inner rate loop, both closed on the EKF state estimate.</figcaption></figure>
+        <figcaption>Cascade PID structure — the outer attitude loop sets the rate target for the inner rate loop, both closed on the EKF state estimate.</figcaption></figure>
+      <div class="prose" style="margin-top:22px"><p>The controller is built as two nested loops. The outer attitude loop compares the target attitude to the EKF estimate and produces an angular-rate command; the inner rate loop compares that command to the measured gyroscope rate and drives the control surface. This nesting makes the rate loop reject disturbances while the slower attitude loop sets where the aircraft points. The same structure is applied independently to roll, pitch, and yaw. Two outer guidance loops sit on top: an altitude loop that commands a pitch target, and an airspeed loop (a PI controller plus a climb-rate feedforward) that commands throttle.</p></div>
       <div class="grid three">
-        <div class="card"><span class="tag">Mode 01</span><h3>Manual</h3><p>Direct radio passthrough with correct surface mixing and per-servo trim.</p></div>
-        <div class="card"><span class="tag">Mode 02</span><h3>Hold / Loiter</h3><p>Captures the current altitude and airspeed and orbits a GPS-anchored circle autonomously.</p></div>
-        <div class="card"><span class="tag">Mode 03</span><h3>Guidance</h3><p>Bank-to-turn navigation — circular loiter and return-to-launch, validated in simulation.</p></div>
+        <div class="card"><span class="tag">Mode 01</span><h3>Manual</h3><p>The pilot's stick inputs pass directly to the surfaces, with mixing.</p></div>
+        <div class="card"><span class="tag">Mode 02</span><h3>Hold</h3><p>The instant the switch is flipped, the autopilot captures the current heading, altitude, and airspeed and flies straight-and-level to maintain them.</p></div>
+        <div class="card"><span class="tag">Mode 03</span><h3>Autonomous</h3><p>The autopilot holds altitude and airspeed and follows guidance maneuvers (circular loiter and return-to-launch) validated in MATLAB simulation.</p></div>
       </div>
       <ul class="ticks">
-        <li><b>Arming interlock</b> — the motor is disarmed at power-up and only lives behind a deliberate switch sequence.</li>
-        <li><b>Link failsafe</b> — loss of the radio for half a second cuts the throttle and safes the surfaces.</li>
-        <li><b>Ground gating</b> — integrators are frozen and the throttle idled until the aircraft is actually flying.</li>
+        <li><b>Arming lock</b>: the motor is disarmed at power-up and only enables through a transmitter switch sequence, so the propeller cannot spin unexpectedly.</li>
+        <li><b>Radio failsafe</b>: loss of the RC link for more than 0.5 seconds cuts the throttle to idle and safes the control surfaces, acting as a hardware deadman switch.</li>
+        <li><b>Ground gating</b>: the controller integrators are frozen and the throttle held at idle until the aircraft is airborne, preventing integrator wind-up and accidental spin-up on the ground.</li>
       </ul>
     </section>
 
     <section id="simulation">
       <div class="sec-head"><span class="idx">05</span><h2>Simulation-first design</h2></div>
       <div class="prose">
-        <p>Nothing was tuned by crashing hardware. The full stack first ran in a <strong>MATLAB 6-DOF simulation</strong> — a rigid-body aircraft model, a trim solver for the cruise operating point, and the same EKF, controllers, and guidance flying a virtual airframe.</p>
-        <p>The sim tuned the gains, exercised the loiter and return-to-launch guidance, and answered the questions you don't want to discover in the air. One example: across the entire flight envelope the control surfaces needed only about <strong>5° of the 25° available</strong> — confirming enormous control-authority margin before the first hand-launch.</p>
+        <p>Before committing to hardware, the entire system was developed and tuned in a MATLAB 6-DOF simulation. The simulation models the aircraft as a rigid body, includes a trim solver to find the cruise operating point, and runs the same EKF, controllers, and guidance that later ran on the Teensy. This allowed the control gains to be tuned and the guidance maneuvers to be exercised without risking the airframe. It also confirmed that the aircraft had enough control authority across the entire flight envelope. The control surfaces used only about 5&deg; of the roughly 25&deg; available, giving a large margin before the first hand launch. The following figures show the full aircraft and control surface responses to a specific navigation flight profile (climb to 15m and loiter with a radius of 100m) in the previously mentioned MATLAB simulation. The green dashed line is a simulated gust of air in a random direction to analyze the response to a larger perturbation.</p>
+      </div>
+
+      <figure><img src="images/SimFlightPath.png" alt="3D flight path: climb-out into a circular loiter orbit." loading="lazy" />
+        <figcaption>3D flight path: the aircraft climbs out from launch and settles into a clean, repeatable circular loiter at the commanded altitude.</figcaption></figure>
+
+      <figure><img src="images/SimAltAirspeedThrottle.png" alt="Altitude, airspeed, and throttle tracking their references over time." loading="lazy" />
+        <figcaption>Altitude, airspeed, and throttle: altitude captures 15&nbsp;m, airspeed settles to 11&nbsp;m/s, and throttle relaxes from its climb setting back toward trim.</figcaption></figure>
+
+      <div class="figrid">
+        <figure><img src="images/SimAttitude.png" alt="Roll, pitch, and yaw angle over time." loading="lazy" />
+          <figcaption>Euler angle responses: roll holds a steady bank for the turn, pitch stays near trim after the climb, and yaw ramps continuously as the aircraft orbits.</figcaption></figure>
+        <figure><img src="images/SimSurfaces.png" alt="Elevator, aileron, and rudder deflection relative to trim over time." loading="lazy" />
+          <figcaption>Control surface response: elevator, aileron, and rudder each use only a few degrees of the roughly ±25° available.</figcaption></figure>
       </div>
     </section>
 
     <section id="hardware">
       <div class="sec-head"><span class="idx">06</span><h2>Hardware</h2></div>
-      <p class="lead">A deliberately minimal, hand-assembled avionics stack — every wire, joint, and calibration done and understood by hand.</p>
+      <p class="lead">The hardware components were chosen to be simple and affordable.</p>
       <div class="spec">
-        <div class="sk">Compute</div><div class="sv"><b>Teensy 4.1</b> — 600 MHz Cortex-M7, C++ / PlatformIO</div>
-        <div class="sk">Inertial</div><div class="sv"><b>ICM-20948</b> 9-DOF IMU (accel · gyro · magnetometer)</div>
-        <div class="sk">Air data</div><div class="sv"><b>BMP280</b> barometric altimeter</div>
-        <div class="sk">Position</div><div class="sv"><b>ATGM336H</b> GNSS receiver</div>
-        <div class="sk">Radio</div><div class="sv"><b>ExpressLRS</b> — RadioMaster Pocket + RP1, CRSF</div>
-        <div class="sk">Airframe</div><div class="sv"><b>~500 g</b> hand-built foam wing · CG at quarter-chord · hand-launched</div>
-        <div class="sk">Actuation</div><div class="sv">Elevator / aileron / rudder servos · brushless motor + ESC</div>
+        <div class="sk">Computation</div><div class="sv"><b>Teensy 4.1</b>: 600 MHz Cortex-M7, C++ / PlatformIO</div>
+        <div class="sk">Inertial</div><div class="sv"><b>ICM-20948</b> 9-DOF IMU (accelerometer · gyroscope · magnetometer)</div>
+        <div class="sk">Altitude</div><div class="sv"><b>BMP280</b> barometer</div>
+        <div class="sk">Position / velocity</div><div class="sv"><b>ATGM336H</b> GPS (fused with the IMU)</div>
+        <div class="sk">Radio</div><div class="sv"><b>ExpressLRS</b>: RadioMaster Pocket + RP1</div>
+        <div class="sk">Actuation</div><div class="sv">Elevator, aileron (×2), rudder servos · brushless motor + ESC</div>
+        <div class="sk">Power</div><div class="sv"><b>LiPo battery</b>: 3S, 50C, 1300 mAh</div>
+        <div class="sk">Airframe</div><div class="sv"><b>~700 g</b> hand-built foam fuselage, wing &amp; tail · CG at wing quarter-chord (positive static margin) · hand-launched, belly-lands on grass (no landing gear)</div>
       </div>
     </section>
 
     <section id="testing">
       <div class="sec-head"><span class="idx">07</span><h2>Calibration &amp; flight test</h2></div>
-      <p class="lead">Resolved the IMU frame from first principles, calibrated the magnetometer, verified every control-surface direction and the failsafe on the bench — then flew it.</p>
+      <p class="lead">Before any powered flight, several checks were carried out on the bench.</p>
+      <ul class="ticks">
+        <li><b>IMU frame</b>: the IMU's axis convention was resolved using gravity as a ground truth, which caught sign errors that would have inverted the controls.</li>
+        <li><b>Magnetometer calibration</b>: hard-iron calibrated to a clean sphere (the three axis spans agreed within about 2.5%) for a trustworthy heading.</li>
+        <li><b>Control directions</b>: every control surface was verified to deflect so as to oppose a disturbance, correcting the aircraft back toward level.</li>
+        <li><b>Failsafe rehearsal</b>: turning off the transmitter was confirmed to idle the motor and center the surfaces.</li>
+      </ul>
       <figure><img src="images/SensorMovement.png" alt="Bench movement test: raw accelerometer and gyro with the fused attitude estimate." />
-        <figcaption>Bench movement test — raw accelerometer (top) and gyro (middle) as the airframe is tilted through roll, pitch, and yaw, with the resulting fused attitude estimate (bottom). The estimator tracks large motion cleanly with no divergence.</figcaption></figure>
-      <div class="prose" style="margin-top:22px"><p>The aircraft has <strong>flown under manual control</strong>, responding correctly to every input — validating the airframe, CG, and control directions in the air. The autopilot modes are being brought online on a conservative progression: manual, then hold at altitude, then fully autonomous.</p></div>
+        <figcaption>Bench movement test:   the aircraft is tilted through roll, pitch, and yaw. The raw accelerometer and gyroscope readings and the resulting fused attitude estimate confirm that the estimator tracks the motion smoothly without diverging.</figcaption></figure>
+      <div class="prose" style="margin-top:22px"><p>The aircraft was flown under manual control for the first flight test. It flew and responded correctly to control inputs, which validated the airframe, the CG location, and the direction of every control surface in flight. The autopilot modes are being tested through a conservative progression: manual flight first, then hold mode engaged at altitude, and finally fully autonomous flight. This ordering ensures that the autopilot's first flight is never also the airframe's first flight, so that any problem can be caught and recovered from manually.</p></div>
     </section>
 
     <section id="lessons">
       <div class="sec-head"><span class="idx">08</span><h2>What broke, and what I learned</h2></div>
       <ul class="ticks">
-        <li><b>An intermittent IMU</b> traced not to my wiring — which ohmed out clean — but to a cracked factory solder joint <em>under</em> the chip, found by watching it drop off the bus when pressed.</li>
-        <li><b>The estimator that diverged</b> — the EKF NaN'd on hard motion and never recovered, until Joseph-form math, a singularity guard, and a divergence recovery made it self-heal.</li>
-        <li><b>Fail-safe by construction</b> — a dead barometer once fed a NaN straight into the filter; now every sensor is optional and every reading validated, so a missing sensor degrades the system instead of crashing it.</li>
+        <li><b>IMU failure</b>: an IMU kept dropping in and out during testing, even after re-flowing the solder to improve the connection. It was concluded that the chip had been fried or failed under pressure or vibration; a more reliable IMU was ordered and replaced the faulty one.</li>
+        <li><b>EKF divergence</b>: the filter that worked in simulation diverged to NaN on the real hardware, due to a covariance losing positive-definiteness compounded by the Euler singularity at ±90°. Finding the fix for it was the most technically complex part of the project.</li>
+        <li><b>Fail-safe</b>: a dead barometer was feeding a NaN straight into the filter and killed the entire estimate. Now every sensor is treated as optional and every reading is validated, so a missing or faulty sensor degrades the system instead of crashing it.</li>
       </ul>
     </section>
 
     <section id="future">
-      <div class="sec-head"><span class="idx">09</span><h2>Where it goes next</h2></div>
+      <div class="sec-head"><span class="idx">09</span><h2>Future work</h2></div>
       <ul class="ticks">
-        <li>A custom PCB to replace the hand-wired avionics and place the magnetometer clear of the motor and battery.</li>
-        <li>TECS total-energy control coupling pitch and throttle.</li>
-        <li>Waypoint navigation, onboard telemetry logging, and the maiden autonomous flight.</li>
+        <li>A robust PCB design for the sensors and wiring, to keep everything compact and reliably connected on one board.</li>
+        <li>Waypoint navigation, onboard telemetry logging, and a fully autonomous mission flight.</li>
+        <li>Eventually, LiDAR and optical-flow sensors for obstacle avoidance and GPS-denied flight.</li>
       </ul>
+    </section>
+
+    <section id="conclusion">
+      <div class="sec-head"><span class="idx">10</span><h2>Conclusion</h2></div>
+      <div class="prose"><p>This project produced a complete, self-built fixed-wing flight-control system: a robust 15-state estimator, a cascaded PID control architecture with manual, hold, and autonomous modes, and a MATLAB simulation used to design and test the whole system before flight. Building every layer myself, rather than configuring an existing autopilot, meant that each failure, from the numerical stability of the estimator to the physics of the airframe, became something I had to understand and fix. The result is both a working autopilot and a thorough understanding of how each piece fits together.</p></div>
     </section>
   </div>
 
   <footer><div class="wrap">
-    <span>Fixed-Wing Autopilot · Teensy + MATLAB</span>
-    <span>Mason Drumwright · Design · Firmware · Controls</span>
+    <span>Fixed-Wing Autopilot</span>
+    <span>Mason Drumwright</span>
   </div></footer>
 </body>
 </html>

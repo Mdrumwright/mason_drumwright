@@ -6,20 +6,20 @@
 <title>Projects — Mason Drumwright</title>
 <style>
   :root {
-    --bg: #0a0f1c; --surface: #101a2f; --surface-2: #16223b;
-    --line: rgba(128,150,190,0.16); --line-strong: rgba(128,150,190,0.30);
-    --text: #d5dcea; --muted: #8794ab; --faint: #5f6c85;
-    --accent: #5cc8e0; --accent-2: #86dcef; --good: #5ecb8c;
+    --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
+    --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
+    --accent: #ffffff; --accent-2: #cfcfcf; --good: #cfcfcf;
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
     --maxw: 1000px; --pad: clamp(20px, 5vw, 64px);
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg: #e9edf4; --surface: #ffffff; --surface-2: #f3f6fb;
-      --line: rgba(30,55,100,0.14); --line-strong: rgba(30,55,100,0.26);
-      --text: #172038; --muted: #52607c; --faint: #7d8aa3;
-      --accent: #0e7f9e; --accent-2: #0b6b86; --good: #1c945a;
+      --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+      --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
+      --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
+      --accent: #000000; --accent-2: #333333; --good: #333333;
     }
   }
   * { box-sizing: border-box; }
@@ -46,6 +46,9 @@
   .proj:hover { transform: translateY(-3px); border-color: var(--accent); }
   .proj .thumb { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 18px; background:#fff; }
   .proj .thumb img { width: 100%; height: 160px; object-fit: cover; object-position: top; display: block; }
+  /* Placeholder thumbnail for projects without an image yet */
+  .thumb.ph { height: 160px; display: grid; place-items: center; background: linear-gradient(150deg, var(--surface-2), var(--surface)); }
+  .thumb.ph svg { width: 66px; height: 66px; stroke: var(--accent); fill: none; opacity: .85; }
   .proj .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--accent); }
   .proj h2 { font-size: 1.25rem; font-weight: 640; letter-spacing: -0.01em; margin: 8px 0 8px; color: var(--text); }
@@ -62,13 +65,12 @@
   <header class="page"><div class="wrap">
     <p class="eyebrow">Selected Work</p>
     <h1>Projects</h1>
-    <p class="sub">Systems I've designed and built end to end — hardware, firmware, and the control theory that ties them together.</p>
+    <p class="sub">Systems I've designed and built</p>
   </div></header>
 
   <div class="wrap"><div class="grid">
     <a class="proj" href="autopilot.html">
       <div class="thumb"><img src="images/SensorMovement.png" alt="Fixed-wing autopilot sensor data" /></div>
-      <span class="tag">Aerospace · Controls · Embedded</span>
       <h2>Fixed-Wing Autopilot</h2>
       <div class="stack">
         <span class="chip">Teensy 4.1</span><span class="chip">C++</span>
@@ -78,7 +80,43 @@
       <span class="go">View project →</span>
     </a>
 
-    <!-- Add more projects by copying an <a class="proj"> ... </a> block. -->
+    <div class="proj">
+      <div class="thumb ph">
+        <svg viewBox="0 0 100 100" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="50" cy="50" rx="40" ry="22" stroke-width="2"/>
+          <circle cx="50" cy="50" r="8" stroke-width="2"/>
+          <circle cx="90" cy="50" r="3.5" fill="var(--accent)" stroke="none"/>
+        </svg>
+      </div>
+      <span class="tag">Astrodynamics · Simulation · GNC</span>
+      <h2>Basilisk Astrodynamics Simulation</h2>
+      <div class="stack">
+        <span class="chip">Basilisk</span><span class="chip">Python</span>
+        <span class="chip">C++</span><span class="chip">Spacecraft GNC</span>
+      </div>
+      <p>Expanding the capabilities of the open-source Basilisk astrodynamics framework — spacecraft dynamics and GNC simulation.
+        <!-- Edit: describe the specific modules / features you're building. --></p>
+      <span class="go">Write-up coming soon</span>
+    </div>
+
+    <div class="proj">
+      <div class="thumb ph">
+        <svg viewBox="0 0 100 100" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="50,14 81,32 81,68 50,86 19,68 19,32" stroke-width="2"/>
+          <circle cx="50" cy="50" r="12" stroke-width="2"/>
+        </svg>
+      </div>
+      <span class="tag">Capstone · Engineering</span>
+      <h2>Senior Design Project</h2>
+      <div class="stack">
+        <span class="chip">Edit me</span><span class="chip">Add tech</span>
+      </div>
+      <p>Placeholder — add a short description of your senior design project here.
+        <!-- Edit: set the title above, the tech chips, and this description. --></p>
+      <span class="go">Write-up coming soon</span>
+    </div>
+
+    <!-- Add more projects by copying a <div class="proj"> ... </div> block. -->
   </div></div>
 </body>
 </html>
