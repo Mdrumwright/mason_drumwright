@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CU in Space — GNC — Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
+    --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
+    --accent: #e5645f; --accent-2: #ef8b87; --good: #cfcfcf;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+    --maxw: 1080px; --pad: clamp(20px, 5vw, 64px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+      --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
+      --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
+      --accent: #c0403c; --accent-2: #9e332f; --good: #333333;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); line-height: 1.65; font-size: 17px;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 650; letter-spacing: -0.02em; line-height: 1.12; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .topbar { border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); }
+  .topbar strong { color: var(--text); font-weight: 600; }
+
+  .hero { padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px); }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(24px, 4vw, 40px); text-align: center; text-wrap: wrap; }
+  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 62ch; line-height: 1.55; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .hero-logo { display: flex; justify-content: center; }
+  .hero-logo img { width: 100%; max-width: 220px; border-radius: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+  .meta span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
+  .meta b { color: var(--text); font-weight: 600; }
+
+  .note { font-family: var(--font-mono); font-size: 12px; color: var(--faint);
+    border: 1px dashed var(--line-strong); border-radius: 10px; padding: 12px 16px; margin-top: 22px; }
+
+  section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sec-head .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  .sec-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+  .prose p { max-width: 68ch; } .prose p + p { margin-top: 1em; }
+  .prose strong { color: var(--text); font-weight: 640; }
+  .lead { color: var(--muted); max-width: 68ch; font-size: 1.08rem; }
+
+  .grid { display: grid; gap: 16px; margin-top: 22px; }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .card .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 12px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.96rem; margin: 0; }
+
+  ul.ticks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; max-width: 68ch; }
+  ul.ticks li { padding-left: 26px; position: relative; color: var(--muted); }
+  ul.ticks li::before { content: "▸"; position: absolute; left: 4px; color: var(--accent); }
+  ul.ticks b { color: var(--text); font-weight: 620; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 40px 56px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .grid.three { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap">
+    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">CU in Space — GNC</strong></span>
+  </div></div>
+
+  <header class="hero"><div class="wrap">
+    <h1>CU in Space</h1>
+    <div class="hero-grid">
+      <div>
+        <p class="lede">CU Boulder's competitive rocketry club, designing and building a rocket for competition. I'm a member of the Guidance, Navigation &amp; Control subteam.</p>
+      </div>
+      <div class="hero-logo"><img src="images/cuinspace.jpg" alt="CU in Space club logo" /></div>
+    </div>
+  </div></header>
+
+  <div class="wrap">
+    <section id="overview">
+      <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
+      <div class="prose">
+        <p>CU in Space is a student-run competitive rocketry club at CU Boulder that designs, builds, and flies rockets for competition. The team spans the full vehicle — structures, propulsion, recovery, and avionics — with subteams owning each part of the design.</p>
+        <p>I'm on the Guidance, Navigation &amp; Control subteam, which is responsible for how the vehicle senses its state and how that information is used in flight.</p>
+      </div>
+    </section>
+
+    <section id="focus">
+      <div class="sec-head"><span class="idx">02</span><h2>My focus — GNC</h2></div>
+      <p class="lead">The GNC subteam owns the rocket's sensing and state estimation — building on the state-estimation and sensor-fusion work from my fixed-wing autopilot.</p>
+      <div class="grid three">
+        <div class="card"><span class="tag">Navigation</span><h3>State estimation</h3><p>Fuse inertial, barometric, and GPS data into an estimate of the rocket's position, velocity, and attitude through the flight.</p></div>
+        <div class="card"><span class="tag">Avionics</span><h3>Sensor integration</h3><p>Select, integrate, and calibrate the flight sensors and get clean, trustworthy data off them.</p></div>
+        <div class="card"><span class="tag">Analysis</span><h3>Flight data</h3><p>Process telemetry and post-flight data to validate the estimate and inform the next design iteration.</p></div>
+      </div>
+    </section>
+
+    <section id="scope">
+      <div class="sec-head"><span class="idx">03</span><h2>Technical scope</h2></div>
+      <p class="lead">Outline of the GNC work, to be refined with the team:</p>
+      <ul class="ticks">
+        <li><b>Sensor suite</b>: IMU, barometer, and GPS selection, integration, and calibration.</li>
+        <li><b>State estimation</b>: sensor fusion for position, velocity, and attitude during boost, coast, and descent.</li>
+        <li><b>Flight computer</b>: onboard software to run the estimator and log data reliably under flight loads.</li>
+        <li><b>Telemetry &amp; recovery</b>: data downlink and support for the recovery sequence.</li>
+        <li><b>Validation</b>: bench testing and post-flight data analysis to verify the system.</li>
+      </ul>
+    </section>
+
+    <section id="status">
+      <div class="sec-head"><span class="idx">04</span><h2>Status &amp; next steps</h2></div>
+      <div class="prose"><p>Active. Progress, design decisions, and flight results will be added here as the project advances.</p></div>
+    </section>
+  </div>
+
+  <footer><div class="wrap">
+    <span>CU in Space — GNC</span>
+    <span>Mason Drumwright</span>
+  </div></footer>
+  <script>
+    (function () {
+      function fit() {
+        document.querySelectorAll('.hero h1').forEach(function (h) {
+          h.style.whiteSpace = 'nowrap';
+          h.style.fontSize = '';
+          var size = parseFloat(getComputedStyle(h).fontSize), guard = 0;
+          while (h.scrollWidth > h.clientWidth + 1 && size > 12 && guard < 400) {
+            size -= 0.5; h.style.fontSize = size + 'px'; guard++;
+          }
+        });
+      }
+      if (document.readyState !== 'loading') fit(); else document.addEventListener('DOMContentLoaded', fit);
+      window.addEventListener('load', fit);
+      window.addEventListener('resize', fit);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Senior Design — UAS GNC — Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
+    --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
+    --accent: #e0a34e; --accent-2: #ecc07e; --good: #cfcfcf;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+    --maxw: 1080px; --pad: clamp(20px, 5vw, 64px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+      --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
+      --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
+      --accent: #b5721f; --accent-2: #8f5a17; --good: #333333;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); line-height: 1.65; font-size: 17px;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 650; letter-spacing: -0.02em; line-height: 1.12; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .topbar { border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); }
+  .topbar strong { color: var(--text); font-weight: 600; }
+
+  .hero { padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px); }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(24px, 4vw, 40px); text-align: center; text-wrap: wrap; }
+  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 62ch; line-height: 1.55; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .hero-logo { display: flex; justify-content: center; }
+  .hero-logo img { width: 100%; max-width: 200px; border-radius: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+  .meta span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
+  .meta b { color: var(--text); font-weight: 600; }
+
+  .note { font-family: var(--font-mono); font-size: 12px; color: var(--faint);
+    border: 1px dashed var(--line-strong); border-radius: 10px; padding: 12px 16px; margin-top: 22px; }
+
+  section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sec-head .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  .sec-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+  .prose p { max-width: 68ch; } .prose p + p { margin-top: 1em; }
+  .prose strong { color: var(--text); font-weight: 640; }
+  .lead { color: var(--muted); max-width: 68ch; font-size: 1.08rem; }
+
+  .grid { display: grid; gap: 16px; margin-top: 22px; }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .card .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 12px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.96rem; margin: 0; }
+
+  .spec { display: grid; grid-template-columns: max-content 1fr; margin-top: 22px;
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .spec > div { padding: 13px 18px; border-top: 1px solid var(--line); }
+  .spec > div:nth-child(-n+2) { border-top: none; }
+  .spec .sk { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); background: var(--surface); white-space: nowrap; }
+  .spec .sv { background: var(--surface-2); font-size: 0.96rem; } .spec .sv b { color: var(--accent); }
+
+  ol.steps { counter-reset: step; list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 12px; max-width: 68ch; }
+  ol.steps li { counter-increment: step; padding-left: 44px; position: relative; color: var(--muted); }
+  ol.steps li::before { content: counter(step); position: absolute; left: 0; top: 0;
+    width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%;
+    border: 1px solid var(--line-strong); font-family: var(--font-mono); font-size: 12px; color: var(--text); }
+  ol.steps b { color: var(--text); font-weight: 620; }
+
+  ul.ticks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; max-width: 68ch; }
+  ul.ticks li { padding-left: 26px; position: relative; color: var(--muted); }
+  ul.ticks li::before { content: "▸"; position: absolute; left: 4px; color: var(--accent); }
+  ul.ticks b { color: var(--text); font-weight: 620; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 40px 56px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .grid.three { grid-template-columns: 1fr; } .spec { grid-template-columns: 1fr; }
+    .spec .sk { border-top: 1px solid var(--line); } .spec > div:nth-child(2) { border-top: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap">
+    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Senior Design — UAS GNC</strong></span>
+  </div></div>
+
+  <header class="hero"><div class="wrap">
+    <h1>Autonomous UAS &amp; Rover Network</h1>
+    <div class="hero-grid">
+      <p class="lede">A two-semester senior design project at CU Boulder. The requirement is to create a cooperative autonomous UAS multirotor and a ground rover. The Multirotor will autonomously fly and locate a target payload site and relay the coordinates to the rover which will then move to the target and deliver a payload</p>
+      <div class="hero-logo"><img src="images/buff.jpg" alt="CU Boulder Buffaloes logo" /></div>
+    </div>
+  </div></header>
+
+  <div class="wrap">
+    <section id="overview">
+      <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
+      <div class="prose">
+        <p>In search and exploration missions it can be advantageous to use a multi-agent network of air- and land-based vehicles to cover an area and deliver or retrieve payloads at locations with reduced accessibility, where the precise location may not initially be known.</p>
+        <p>Each vehicle type has an advantage in its own environment: the UAS can maneuver over terrain to search a wide area but may not be able to land where clearance is limited, while the rover can operate on terrain the UAS cannot reach. In this project a UAS multirotor performs the search, exploration, and precise localization of a point of interest (for example, a stranded hiker), and a rover handles payload delivery or retrieval once that location is known. The two vehicles work autonomously and cooperatively to increase the overall chance of mission success.</p>
+      </div>
+    </section>
+
+    <section id="conops">
+      <div class="sec-head"><span class="idx">02</span><h2>Mission &amp; concept of operations</h2></div>
+      <p class="lead">The reference mission profile the network is built around:</p>
+      <ol class="steps">
+        <li><b>Takeoff.</b> The UAS is given the coordinates of an area of interest and takes off from starting point A (manual control).</li>
+        <li><b>Transit.</b> The UAS flies to the area of interest (autonomous / semi-autonomous with manual override).</li>
+        <li><b>Search.</b> The UAS searches within the area of interest to detect an ArUco marker.</li>
+        <li><b>Relay.</b> The UAS detects the marker and relays its coordinates to the rover or base station.</li>
+        <li><b>Return.</b> The UAS returns to its starting location.</li>
+        <li><b>Rover transit.</b> The rover receives the marker coordinates and moves from starting point B toward the marker.</li>
+        <li><b>Payload.</b> The rover delivers or retrieves a payload within a radius of the marker (manual control).</li>
+        <li><b>Rover return.</b> The rover returns to its starting location.</li>
+      </ol>
+    </section>
+
+    <section id="myrole">
+      <div class="sec-head"><span class="idx">03</span><h2>My focus: GNC (UAS)</h2></div>
+      <p class="lead">The UAS Guidance, Navigation &amp; Control subteam owns how the vehicle knows where it is and how it moves: characterizing the vehicle's dynamics, and the algorithms and systems that measure or estimate its state, plan its motion, and control it. Team has ownership over: guidance, navigation, state estimation, flight-control laws, and open- and closed-loop performance.</p>
+      <div class="grid three">
+        <div class="card"><span class="tag">Navigation</span><h3>State estimation</h3><p>Fuse IMU, GPS, and vision into a robust pose estimate for the multirotor.</p></div>
+        <div class="card"><span class="tag">Guidance</span><h3>Autonomy &amp; search</h3><p>Waypoint guidance to the area of interest and a search pattern to cover it and detect the ArUco marker, with a manual override on every autonomous phase.</p></div>
+        <div class="card"><span class="tag">Control</span><h3>Precision flight</h3><p>Flight-control laws for stable, slow, low-altitude flight precise enough to localize the marker to within the required accuracy.</p></div>
+      </div>
+    </section>
+
+    <section id="requirements">
+      <div class="sec-head"><span class="idx">04</span><h2>Key UAS requirements</h2></div>
+      <p class="lead">The initial requirements that scope the UAS</p>
+      <div class="spec">
+        <div class="sk">Footprint</div><div class="sv">≤ 50 × 50 × 30 cm (L × W × H)</div>
+        <div class="sk">Endurance</div><div class="sv">≥ 15 minutes</div>
+        <div class="sk">Weight</div><div class="sv">≤ 25 lb (11.3 kg)</div>
+        <div class="sk">Operating temp</div><div class="sv">15 – 25 °C</div>
+        <div class="sk">Marker detection</div><div class="sv">Detect an ArUco marker to within a 30 cm radius, then relay its coordinates</div>
+        <div class="sk">Test envelope</div><div class="sv">≤ 2 m above ground level · ≤ 0.5 m/s · within visual line of sight</div>
+        <div class="sk">Autonomy</div><div class="sv">Autonomous / semi-autonomous, with a manual override on every autonomous phase</div>
+        <div class="sk">Compliance</div><div class="sv">All relevant FAA regulations and CU Flight Ops policies</div>
+      </div>
+    </section>
+
+    <section id="plan">
+      <div class="sec-head"><span class="idx">05</span><h2>GNC technical plan</h2></div>
+      <p class="lead">An outline of the GNC work, to be refined with the team:</p>
+      <ul class="ticks">
+        <li><b>State estimation</b>: sensor fusion (IMU · GPS · vision) into a reliable position/attitude estimate for the multirotor.</li>
+        <li><b>Autonomous navigation</b>: waypoint guidance from the start point to the area of interest, with a manual override.</li>
+        <li><b>Search guidance</b>: a coverage/search pattern over the ~5 × 5 m area of interest to find the ArUco marker.</li>
+        <li><b>Perception &amp; localization</b>: ArUco marker detection and precise (≤ 30 cm) position estimation; relay coordinates to the rover / base station.</li>
+        <li><b>Precision control</b>: control laws tuned for slow (≤ 0.5 m/s), low-altitude (≤ 2 m) flight during testing and the demo.</li>
+        <li><b>Modes &amp; override</b>: clean mode logic and return-to-launch, with manual takeover always available.</li>
+      </ul>
+    </section>
+
+    <section id="timeline">
+      <div class="sec-head"><span class="idx">06</span><h2>Timeline &amp; milestones</h2></div>
+      <p class="lead">The project runs across two semesters against a schedule of formal design reviews, each with a hard deadline. The design has to be presented, defended, and signed off before the team moves to the next phase:</p>
+      <ol class="steps">
+        <li><b>Conceptual design (CONOPS)</b>: lock in the concept of operations, requirements, and candidate architectures for the UAS and rover.</li>
+        <li><b>Preliminary Design Review (PDR)</b>: present the baselined architecture and subsystem approach, with early analysis showing the design is feasible.</li>
+        <li><b>Critical Design Review (CDR)</b>: a detailed, build-ready design: subsystem designs finalized, interfaces frozen, and analysis backing every requirement.</li>
+        <li><b>Prototyping &amp; manufacturing</b>: build and integrate the UAS (and rover) subsystems and bring them together into a working vehicle.</li>
+        <li><b>Test Readiness Review (TRR)</b>: test plans, procedures, and safety approvals in place before any powered or flight testing.</li>
+        <li><b>Testing &amp; demonstration</b>: subsystem and full-system testing, culminating in the end-to-end mission demonstration.</li>
+        <li><b>Final review &amp; symposium</b>: final results, final report, and the project symposium.</li>
+      </ol>
+    </section>
+    
+  </div>
+
+  <footer><div class="wrap">
+    <span>Senior Design — UAS GNC</span>
+    <span>Mason Drumwright</span>
+  </div></footer>
+  <script>
+    (function () {
+      function fit() {
+        document.querySelectorAll('.hero h1').forEach(function (h) {
+          h.style.whiteSpace = 'nowrap';
+          h.style.fontSize = '';
+          var size = parseFloat(getComputedStyle(h).fontSize), guard = 0;
+          while (h.scrollWidth > h.clientWidth + 1 && size > 12 && guard < 400) {
+            size -= 0.5; h.style.fontSize = size + 'px'; guard++;
+          }
+        });
+      }
+      if (document.readyState !== 'loading') fit(); else document.addEventListener('DOMContentLoaded', fit);
+      window.addEventListener('load', fit);
+      window.addEventListener('resize', fit);
+    })();
+  </script>
+</body>
+</html>

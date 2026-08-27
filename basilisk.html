@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Basilisk Astrodynamics Simulation — Mason Drumwright</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
+    --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
+    --accent: #a78bfa; --accent-2: #c4b5fd; --good: #cfcfcf;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+    --maxw: 1080px; --pad: clamp(20px, 5vw, 64px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+      --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
+      --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
+      --accent: #7c5cd6; --accent-2: #6544c0; --good: #333333;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); line-height: 1.65; font-size: 17px;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 650; letter-spacing: -0.02em; line-height: 1.12; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .topbar { border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); }
+  .topbar strong { color: var(--text); font-weight: 600; }
+
+  .hero { padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px); }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(24px, 4vw, 40px); text-align: center; text-wrap: wrap; }
+  .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 62ch; line-height: 1.55; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .hero-logo { display: flex; justify-content: center; }
+  .hero-logo img { width: 100%; max-width: 260px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+  .meta span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
+  .meta b { color: var(--text); font-weight: 600; }
+
+  .note { font-family: var(--font-mono); font-size: 12px; color: var(--faint);
+    border: 1px dashed var(--line-strong); border-radius: 10px; padding: 12px 16px; margin-top: 22px; }
+
+  section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sec-head .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+  .sec-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+  .prose p { max-width: 68ch; } .prose p + p { margin-top: 1em; }
+  .prose strong { color: var(--text); font-weight: 640; }
+  .lead { color: var(--muted); max-width: 68ch; font-size: 1.08rem; }
+
+  .grid { display: grid; gap: 16px; margin-top: 22px; }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .card .tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 12px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.96rem; margin: 0; }
+
+  .spec { display: grid; grid-template-columns: max-content 1fr; margin-top: 22px;
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .spec > div { padding: 13px 18px; border-top: 1px solid var(--line); }
+  .spec > div:nth-child(-n+2) { border-top: none; }
+  .spec .sk { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); background: var(--surface); white-space: nowrap; }
+  .spec .sv { background: var(--surface-2); font-size: 0.96rem; }
+
+  ul.ticks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; max-width: 68ch; }
+  ul.ticks li { padding-left: 26px; position: relative; color: var(--muted); }
+  ul.ticks li::before { content: "▸"; position: absolute; left: 4px; color: var(--accent); }
+  ul.ticks b { color: var(--text); font-weight: 620; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 40px 56px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .grid.three { grid-template-columns: 1fr; } .spec { grid-template-columns: 1fr; }
+    .spec .sk { border-top: 1px solid var(--line); } .spec > div:nth-child(2) { border-top: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap">
+    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Basilisk Simulation</strong></span>
+  </div></div>
+
+  <header class="hero"><div class="wrap">
+    <h1>Basilisk Astrodynamics Simulation</h1>
+    <div class="hero-grid">
+      <p class="lede">Working with Basilisk, an open-source astrodynamics simulation framework, to expand its capabilities. Specifically increasing the complexity and fidelity of the spacecraft dynamics simulation.</p>
+      <div class="hero-logo"><img src="images/Basilisk-Logo.png" alt="Basilisk framework logo" /></div>
+    </div>
+  </div></header>
+
+  <div class="wrap">
+    <section id="overview">
+      <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
+      <div class="prose">
+        <p>The purpose of the Basilisk astrodynamics simulation framework is to enable sophisticated spacecraft simulations to be rapidly created from a series of pre-built modules. Consider a deep space mission where the spacecraft must perform a series of science, communication, station keeping and orbit maneuver tasks. Such operations require not only the spacecraft orbital and attitude dynamics to be modeled, but also sub-components such as reaction wheels, thruster, flexible panels, fuel slosh. Beyond the mechanical components the spacecraft also contains algorithms that determine the orientation, perform closed loop maneuvers, process sensor data etc. Depending on the depth of analysis being performed, the battery, data storage or communication devices might have to be modeled.</p>
+        <p>My work is focused on increasing the complexity of the dynamics that the simulation is capable of modeling.</p>
+      </div>
+    </section>
+
+    <section id="focus">
+      <div class="sec-head"><span class="idx">02</span><h2>My focus</h2></div>
+      <p class="lead">Increasing the complexity and fidelity of the spacecraft dynamics simulation within Basilisk.</p>
+      <div class="grid three">
+        <div class="card"><span class="tag">Modeling</span><h3>Higher-fidelity dynamics</h3><p>Extend how the spacecraft and its environment are represented so simulations capture more of the real physics.</p></div>
+        <div class="card"><span class="tag">Implementation</span><h3>Modules &amp; integration</h3><p>Build and integrate new modules into the C/C++ framework and python interface.</p></div>
+        <div class="card"><span class="tag">Validation</span><h3>Verification</h3><p>Write test scripts to evaluate the performance of new modules and features.</p></div>
+      </div>
+    </section>
+
+    <section id="scope">
+      <div class="sec-head"><span class="idx">03</span><h2>Technical scope</h2></div>
+      <p class="lead">Outline of the work:</p>
+      <ul class="ticks">
+        <li><b>Spacecraft dynamics</b>: extend the rigid and flexible body and environment models used in the simulation.</li>
+        <li><b>Framework development</b>: implement new modules within Basilisk's message-passing architecture.</li>
+        <li><b>Python / C++</b>: expose new C/C++ capability through the Python scripting layer.</li>
+        <li><b>Verification</b>: build test scenarios and compare against analytical or reference results.</li>
+      </ul>
+    </section>
+
+    <section id="status">
+      <div class="sec-head"><span class="idx">04</span><h2>Status</h2></div>
+      <div class="prose"><p>Actively in progress. Progress, design decisions, and results will be added as the work advances.</p></div>
+    </section>
+  </div>
+
+  <footer><div class="wrap">
+    <span>Basilisk Astrodynamics Simulation</span>
+    <span>Mason Drumwright</span>
+  </div></footer>
+  <script>
+    (function () {
+      function fit() {
+        document.querySelectorAll('.hero h1').forEach(function (h) {
+          h.style.whiteSpace = 'nowrap';
+          h.style.fontSize = '';
+          var size = parseFloat(getComputedStyle(h).fontSize), guard = 0;
+          while (h.scrollWidth > h.clientWidth + 1 && size > 12 && guard < 400) {
+            size -= 0.5; h.style.fontSize = size + 'px'; guard++;
+          }
+        });
+      }
+      if (document.readyState !== 'loading') fit(); else document.addEventListener('DOMContentLoaded', fit);
+      window.addEventListener('load', fit);
+      window.addEventListener('resize', fit);
+    })();
+  </script>
+</body>
+</html>

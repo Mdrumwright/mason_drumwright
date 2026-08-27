@@ -9,7 +9,7 @@
     --bg: #0a0a0a; --surface: #161616; --surface-2: #1f1f1f;
     --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.28);
     --text: #f2f2f2; --muted: #a6a6a6; --faint: #6e6e6e;
-    --accent: #ffffff; --accent-2: #cfcfcf; --amber: #ededed; --good: #cfcfcf;
+    --accent: #4aa6e6; --accent-2: #7bc0f0; --amber: #ededed; --good: #cfcfcf;
     --sky: #3a3a3a; --ground: #1a1a1a;
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
@@ -20,7 +20,7 @@
       --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
       --line: rgba(0,0,0,0.14); --line-strong: rgba(0,0,0,0.30);
       --text: #0d0d0d; --muted: #555555; --faint: #8a8a8a;
-      --accent: #000000; --accent-2: #333333; --amber: #222222; --good: #333333;
+      --accent: #2f7fc0; --accent-2: #245f92; --amber: #222222; --good: #333333;
       --sky: #d0d0d0; --ground: #a0a0a0;
     }
   }
@@ -46,7 +46,7 @@
 
   .hero { padding-block: clamp(48px, 8vw, 96px) clamp(40px, 6vw, 72px); }
   .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
-  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(28px, 4vw, 44px); }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); margin: 0 0 clamp(28px, 4vw, 44px); text-align: center; }
   .hero .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); max-width: 52ch; margin-top: 0; line-height: 1.55; }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 40px;
     background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
@@ -258,5 +258,22 @@
     <span>Fixed-Wing Autopilot</span>
     <span>Mason Drumwright</span>
   </div></footer>
+  <script>
+    (function () {
+      function fit() {
+        document.querySelectorAll('.hero h1').forEach(function (h) {
+          h.style.whiteSpace = 'nowrap';
+          h.style.fontSize = '';
+          var size = parseFloat(getComputedStyle(h).fontSize), guard = 0;
+          while (h.scrollWidth > h.clientWidth + 1 && size > 12 && guard < 400) {
+            size -= 0.5; h.style.fontSize = size + 'px'; guard++;
+          }
+        });
+      }
+      if (document.readyState !== 'loading') fit(); else document.addEventListener('DOMContentLoaded', fit);
+      window.addEventListener('load', fit);
+      window.addEventListener('resize', fit);
+    })();
+  </script>
 </body>
 </html>
