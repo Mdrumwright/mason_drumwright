@@ -93,7 +93,7 @@
     <h1>CU in Space</h1>
     <div class="hero-grid">
       <div>
-        <p class="lede">CU Boulder's competitive rocketry club, designing and building a rocket for competition. I'm a member of the Guidance, Navigation &amp; Control subteam.</p>
+        <p class="lede">CU Boulder's competitive rocketry club. On the Guidance, Navigation &amp; Control team, I work on a hybrid rocket targeting a precise 10,000 ft apogee using active airbrake control.</p>
       </div>
       <div class="hero-logo"><img src="images/cuinspace.jpg" alt="CU in Space club logo" /></div>
     </div>
@@ -103,36 +103,36 @@
     <section id="overview">
       <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
       <div class="prose">
-        <p>CU in Space is a student-run competitive rocketry club at CU Boulder that designs, builds, and flies rockets for competition. The team spans the full vehicle — structures, propulsion, recovery, and avionics — with subteams owning each part of the design.</p>
-        <p>I'm on the Guidance, Navigation &amp; Control subteam, which is responsible for how the vehicle senses its state and how that information is used in flight.</p>
+        <p>CU in Space is a student-run competitive rocketry club at CU Boulder that designs, builds, and flies rockets for competition. The team spans the full vehicle: structures, propulsion, recovery, and avionics, with subteams owning each part of the design.</p>
+        <p>On the Guidance, Navigation &amp; Control team, I contribute to the system-level design of a hybrid rocket that hits a precise apogee of 10,000 ft using active airbrakes to increase drag and shed velocity. My work spans the state estimation that tracks the rocket and the control system that drives the airbrakes.</p>
       </div>
     </section>
 
     <section id="focus">
-      <div class="sec-head"><span class="idx">02</span><h2>My focus — GNC</h2></div>
-      <p class="lead">The GNC subteam owns the rocket's sensing and state estimation — building on the state-estimation and sensor-fusion work from my fixed-wing autopilot.</p>
+      <div class="sec-head"><span class="idx">02</span><h2>My focus: GNC</h2></div>
+      <p class="lead">My work on the GNC team spans state estimation and active airbrake control for a precise-apogee hybrid rocket.</p>
       <div class="grid three">
-        <div class="card"><span class="tag">Navigation</span><h3>State estimation</h3><p>Fuse inertial, barometric, and GPS data into an estimate of the rocket's position, velocity, and attitude through the flight.</p></div>
-        <div class="card"><span class="tag">Avionics</span><h3>Sensor integration</h3><p>Select, integrate, and calibrate the flight sensors and get clean, trustworthy data off them.</p></div>
-        <div class="card"><span class="tag">Analysis</span><h3>Flight data</h3><p>Process telemetry and post-flight data to validate the estimate and inform the next design iteration.</p></div>
+        <div class="card"><span class="tag">Guidance</span><h3>Apogee targeting</h3><p>Contributing to the system-level design of a hybrid rocket targeting a precise apogee of 10,000 ft using active airbrake control to increase drag and reduce velocity.</p></div>
+        <div class="card"><span class="tag">Navigation</span><h3>State estimation</h3><p>Designing state-estimation algorithms to track the rocket during ascent, using attitude estimation from accelerometer and gyroscope sensor fusion with an Extended Kalman Filter to estimate the full state.</p></div>
+        <div class="card"><span class="tag">Control</span><h3>MPC airbrakes</h3><p>Developing a Model Predictive Control system in MATLAB and C++ that extends the airbrakes from the EKF state, using Monte Carlo analysis to understand behavior across control parameters and gains.</p></div>
       </div>
     </section>
 
     <section id="scope">
       <div class="sec-head"><span class="idx">03</span><h2>Technical scope</h2></div>
-      <p class="lead">Outline of the GNC work, to be refined with the team:</p>
+      <p class="lead">Outline of the GNC work:</p>
       <ul class="ticks">
-        <li><b>Sensor suite</b>: IMU, barometer, and GPS selection, integration, and calibration.</li>
-        <li><b>State estimation</b>: sensor fusion for position, velocity, and attitude during boost, coast, and descent.</li>
-        <li><b>Flight computer</b>: onboard software to run the estimator and log data reliably under flight loads.</li>
-        <li><b>Telemetry &amp; recovery</b>: data downlink and support for the recovery sequence.</li>
-        <li><b>Validation</b>: bench testing and post-flight data analysis to verify the system.</li>
+        <li><b>State estimation</b>: accelerometer/gyroscope sensor fusion with an EKF to estimate the rocket's full state during ascent.</li>
+        <li><b>Active airbrakes</b>: system-level design of an airbrake control system to hit a precise 10,000 ft apogee.</li>
+        <li><b>Model Predictive Control</b>: MPC in MATLAB and C++ that commands airbrake extension from the estimated state.</li>
+        <li><b>Monte Carlo analysis</b>: sweeping control parameters and gains to understand and tune closed-loop behavior.</li>
+        <li><b>Validation</b>: analysis and testing to verify the estimator and controller before flight.</li>
       </ul>
     </section>
 
     <section id="status">
       <div class="sec-head"><span class="idx">04</span><h2>Status &amp; next steps</h2></div>
-      <div class="prose"><p>Active. Progress, design decisions, and flight results will be added here as the project advances.</p></div>
+      <div class="prose"><p>Active (September 2025 – present). Design, analysis, and flight results will be added here as the project advances.</p></div>
     </section>
   </div>
 

@@ -102,13 +102,13 @@
 </head>
 <body>
   <div class="topbar"><div class="wrap">
-    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Senior Design — UAS GNC</strong></span>
+    <span><a href="index.html" style="color:var(--muted)">← Home</a> &nbsp;·&nbsp; <a href="projects.html" style="color:var(--muted)">Projects</a> &nbsp;/&nbsp; <strong style="color:var(--text)">Senior Design — Dynamics &amp; Controls</strong></span>
   </div></div>
 
   <header class="hero"><div class="wrap">
     <h1>Autonomous UAS &amp; Rover Network</h1>
     <div class="hero-grid">
-      <p class="lede">A two-semester senior design project at CU Boulder. The requirement is to create a cooperative autonomous UAS multirotor and a ground rover. The Multirotor will autonomously fly and locate a target payload site and relay the coordinates to the rover which will then move to the target and deliver a payload</p>
+      <p class="lede">A two-semester senior design project at CU Boulder. We are designing a cooperative autonomous UAS Multirotor and Ground Rover. The multirotor autonomously locates a target payload site and relays the coordinates to the rover, which drives to it and delivers a payload. I'm the Dynamics &amp; Controls Lead on the Rover.</p>
       <div class="hero-logo"><img src="images/buff.jpg" alt="CU Boulder Buffaloes logo" /></div>
     </div>
   </div></header>
@@ -117,7 +117,7 @@
     <section id="overview">
       <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
       <div class="prose">
-        <p>In search and exploration missions it can be advantageous to use a multi-agent network of air- and land-based vehicles to cover an area and deliver or retrieve payloads at locations with reduced accessibility, where the precise location may not initially be known.</p>
+        <p>In search and exploration missions it can be advantageous to use a multi-agent network of air and land-based vehicles to cover an area and deliver or retrieve payloads at locations with reduced accessibility, where the precise location may not initially be known.</p>
         <p>Each vehicle type has an advantage in its own environment: the UAS can maneuver over terrain to search a wide area but may not be able to land where clearance is limited, while the rover can operate on terrain the UAS cannot reach. In this project a UAS multirotor performs the search, exploration, and precise localization of a point of interest (for example, a stranded hiker), and a rover handles payload delivery or retrieval once that location is known. The two vehicles work autonomously and cooperatively to increase the overall chance of mission success.</p>
       </div>
     </section>
@@ -138,40 +138,37 @@
     </section>
 
     <section id="myrole">
-      <div class="sec-head"><span class="idx">03</span><h2>My focus: GNC (UAS)</h2></div>
-      <p class="lead">The UAS Guidance, Navigation &amp; Control subteam owns how the vehicle knows where it is and how it moves: characterizing the vehicle's dynamics, and the algorithms and systems that measure or estimate its state, plan its motion, and control it. Team has ownership over: guidance, navigation, state estimation, flight-control laws, and open- and closed-loop performance.</p>
+      <div class="sec-head"><span class="idx">03</span><h2>My role: Dynamics &amp; Controls Lead</h2></div>
+      <p class="lead">As Dynamics &amp; Controls Lead, I lead the team that characterizes the rover's dynamics and builds the control system that drive it.</p>
       <div class="grid three">
-        <div class="card"><span class="tag">Navigation</span><h3>State estimation</h3><p>Fuse IMU, GPS, and vision into a robust pose estimate for the multirotor.</p></div>
-        <div class="card"><span class="tag">Guidance</span><h3>Autonomy &amp; search</h3><p>Waypoint guidance to the area of interest and a search pattern to cover it and detect the ArUco marker, with a manual override on every autonomous phase.</p></div>
-        <div class="card"><span class="tag">Control</span><h3>Precision flight</h3><p>Flight-control laws for stable, slow, low-altitude flight precise enough to localize the marker to within the required accuracy.</p></div>
+        <div class="card"><span class="tag">Leadership</span><h3>Leading D&amp;C</h3><p>Leading the Dynamics &amp; Controls team by outlining the GNC CONOPS, delegating tasks to team members, and working with the hardware team to develop a robust control system for the autonomous rover.</p></div>
+        <div class="card"><span class="tag">Dynamics</span><h3>Rover simulation</h3><p>Simulating the dynamics for the rover design including the X-Y planar movement and the payload delivery mechanism by defining design requirements and deriving equations of motion to visualize motion using MATLAB/Python.</p></div>
+        <div class="card"><span class="tag">Control</span><h3>Precise delivery</h3><p>Building a control system capable of precise payload delivery and obstacle avoidance by performing trade studies of different control laws and implementing Optical Flow and LiDAR sensors to increase system reliability.</p></div>
       </div>
     </section>
 
     <section id="requirements">
-      <div class="sec-head"><span class="idx">04</span><h2>Key UAS requirements</h2></div>
-      <p class="lead">The initial requirements that scope the UAS</p>
+      <div class="sec-head"><span class="idx">04</span><h2>Key rover requirements</h2></div>
+      <p class="lead">The initial requirements that scope the rover:</p>
       <div class="spec">
-        <div class="sk">Footprint</div><div class="sv">≤ 50 × 50 × 30 cm (L × W × H)</div>
-        <div class="sk">Endurance</div><div class="sv">≥ 15 minutes</div>
-        <div class="sk">Weight</div><div class="sv">≤ 25 lb (11.3 kg)</div>
+        <div class="sk">Footprint</div><div class="sv">≤ 30 × 30 × 30 cm (excluding the payload mechanism)</div>
+        <div class="sk">Endurance</div><div class="sv">≥ 60 minutes</div>
         <div class="sk">Operating temp</div><div class="sv">15 – 25 °C</div>
-        <div class="sk">Marker detection</div><div class="sv">Detect an ArUco marker to within a 30 cm radius, then relay its coordinates</div>
-        <div class="sk">Test envelope</div><div class="sv">≤ 2 m above ground level · ≤ 0.5 m/s · within visual line of sight</div>
+        <div class="sk">Task</div><div class="sv">Receive the marker coordinates, autonomously drive to the marker, deliver/retrieve a payload within a 30 cm radius, and return to start</div>
+        <div class="sk">Terrain</div><div class="sv">Traverse terrain features up to 3 cm high without being impeded</div>
         <div class="sk">Autonomy</div><div class="sv">Autonomous / semi-autonomous, with a manual override on every autonomous phase</div>
-        <div class="sk">Compliance</div><div class="sv">All relevant FAA regulations and CU Flight Ops policies</div>
       </div>
     </section>
 
     <section id="plan">
-      <div class="sec-head"><span class="idx">05</span><h2>GNC technical plan</h2></div>
-      <p class="lead">An outline of the GNC work, to be refined with the team:</p>
+      <div class="sec-head"><span class="idx">05</span><h2>Dynamics &amp; Controls plan</h2></div>
+      <p class="lead">An outline of the Dynamics &amp; Controls work:</p>
       <ul class="ticks">
-        <li><b>State estimation</b>: sensor fusion (IMU · GPS · vision) into a reliable position/attitude estimate for the multirotor.</li>
-        <li><b>Autonomous navigation</b>: waypoint guidance from the start point to the area of interest, with a manual override.</li>
-        <li><b>Search guidance</b>: a coverage/search pattern over the ~5 × 5 m area of interest to find the ArUco marker.</li>
-        <li><b>Perception &amp; localization</b>: ArUco marker detection and precise (≤ 30 cm) position estimation; relay coordinates to the rover / base station.</li>
-        <li><b>Precision control</b>: control laws tuned for slow (≤ 0.5 m/s), low-altitude (≤ 2 m) flight during testing and the demo.</li>
-        <li><b>Modes &amp; override</b>: clean mode logic and return-to-launch, with manual takeover always available.</li>
+        <li><b>Equations of motion</b>: derive the rover's EOM for X–Y planar movement and the payload-delivery mechanism.</li>
+        <li><b>Dynamics simulation</b>: model and visualize the rover's motion in MATLAB/Python from defined design requirements.</li>
+        <li><b>Control laws</b>: trade studies of candidate control laws for precise, repeatable payload delivery.</li>
+        <li><b>Perception</b>: integrate Optical Flow and LiDAR sensors for obstacle avoidance and reliability.</li>
+        <li><b>Autonomy &amp; override</b>: autonomous rover motion with a manual override available on every phase.</li>
       </ul>
     </section>
 
@@ -192,7 +189,7 @@
   </div>
 
   <footer><div class="wrap">
-    <span>Senior Design — UAS GNC</span>
+    <span>Senior Design — Dynamics &amp; Controls</span>
     <span>Mason Drumwright</span>
   </div></footer>
   <script>

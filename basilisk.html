@@ -101,7 +101,7 @@
   <header class="hero"><div class="wrap">
     <h1>Basilisk Astrodynamics Simulation</h1>
     <div class="hero-grid">
-      <p class="lede">Working with Basilisk, an open-source astrodynamics simulation framework, to expand its capabilities. Specifically increasing the complexity and fidelity of the spacecraft dynamics simulation.</p>
+      <p class="lede">As a Research Assistant in CU Boulder's Autonomous Vehicle Systems Lab, I extend the open-source Basilisk astrodynamics framework by expanding its spacecraft dynamics to model more complex multibody configurations.</p>
       <div class="hero-logo"><img src="images/Basilisk-Logo.png" alt="Basilisk framework logo" /></div>
     </div>
   </div></header>
@@ -110,18 +110,18 @@
     <section id="overview">
       <div class="sec-head"><span class="idx">01</span><h2>Overview</h2></div>
       <div class="prose">
-        <p>The purpose of the Basilisk astrodynamics simulation framework is to enable sophisticated spacecraft simulations to be rapidly created from a series of pre-built modules. Consider a deep space mission where the spacecraft must perform a series of science, communication, station keeping and orbit maneuver tasks. Such operations require not only the spacecraft orbital and attitude dynamics to be modeled, but also sub-components such as reaction wheels, thruster, flexible panels, fuel slosh. Beyond the mechanical components the spacecraft also contains algorithms that determine the orientation, perform closed loop maneuvers, process sensor data etc. Depending on the depth of analysis being performed, the battery, data storage or communication devices might have to be modeled.</p>
-        <p>My work is focused on increasing the complexity of the dynamics that the simulation is capable of modeling.</p>
+        <p>The purpose of the Basilisk astrodynamics simulation framework is to enable sophisticated spacecraft simulations to be rapidly created from a series of pre-built modules. Consider a deep space mission where the spacecraft must perform a series of science, communication, station keeping and orbit maneuver tasks. Such operations require not only the spacecraft orbital and attitude dynamics to be modeled, but also sub-components such as reaction wheels, thruster, flexible panels, and fuel slosh. Beyond the mechanical components the spacecraft also contains algorithms that determine the orientation, perform closed loop maneuvers, process sensor data etc. Depending on the depth of analysis being performed, the battery, data storage or communication devices might have to be modeled.</p>
+        <p>My work focuses on extending the dynamics that the simulation can model. This requires deriving the general equations of motion for complex multibody spacecraft and implementing them as new modules in the framework.</p>
       </div>
     </section>
 
     <section id="focus">
       <div class="sec-head"><span class="idx">02</span><h2>My focus</h2></div>
-      <p class="lead">Increasing the complexity and fidelity of the spacecraft dynamics simulation within Basilisk.</p>
+      <p class="lead">Extending Basilisk's spacecraft dynamics to support complex multibody configurations.</p>
       <div class="grid three">
-        <div class="card"><span class="tag">Modeling</span><h3>Higher-fidelity dynamics</h3><p>Extend how the spacecraft and its environment are represented so simulations capture more of the real physics.</p></div>
-        <div class="card"><span class="tag">Implementation</span><h3>Modules &amp; integration</h3><p>Build and integrate new modules into the C/C++ framework and python interface.</p></div>
-        <div class="card"><span class="tag">Validation</span><h3>Verification</h3><p>Write test scripts to evaluate the performance of new modules and features.</p></div>
+        <div class="card"><span class="tag">Dynamics</span><h3>Branching dynamics</h3><p>Extending spacecraft dynamics to support the branching dynamics of rigid-body subcomponents relative to the hub. Deriving the general translational and rotational equations of motion for complex spinning and translating systems.</p></div>
+        <div class="card"><span class="tag">Framework</span><h3>Decoupling dynamics</h3><p>Implementing decoupling dynamics in the open-source Basilisk framework, expanding simulation capability for complex multibody spacecraft configurations.</p></div>
+        <div class="card"><span class="tag">Application</span><h3>Panel deployments</h3><p>Simulating complex solar-panel deployments with Basilisk's prescribed-motion state effector module to analyze the results of different panel geometries.</p></div>
       </div>
     </section>
 
@@ -129,16 +129,17 @@
       <div class="sec-head"><span class="idx">03</span><h2>Technical scope</h2></div>
       <p class="lead">Outline of the work:</p>
       <ul class="ticks">
-        <li><b>Spacecraft dynamics</b>: extend the rigid and flexible body and environment models used in the simulation.</li>
-        <li><b>Framework development</b>: implement new modules within Basilisk's message-passing architecture.</li>
-        <li><b>Python / C++</b>: expose new C/C++ capability through the Python scripting layer.</li>
-        <li><b>Verification</b>: build test scenarios and compare against analytical or reference results.</li>
+        <li><b>Equations of motion</b>: derive the general translational and rotational EOM for complex spinning and translating multibody systems.</li>
+        <li><b>Multibody dynamics</b>: implement branching and decoupling dynamics for rigid-body subcomponents relative to the spacecraft hub.</li>
+        <li><b>Deployment analysis</b>: simulate solar-panel deployments with the prescribed-motion state effector module across different panel geometries.</li>
+        <li><b>C++ / Python</b>: build modules in the C/C++ core and expose them through the Python interface.</li>
+        <li><b>Version control</b>: manage work in a shared Git repository to track edits and fix bugs quickly.</li>
       </ul>
     </section>
 
     <section id="status">
       <div class="sec-head"><span class="idx">04</span><h2>Status</h2></div>
-      <div class="prose"><p>Actively in progress. Progress, design decisions, and results will be added as the work advances.</p></div>
+      <div class="prose"><p>Ongoing research (May 2026 – present) in the Autonomous Vehicle Systems Lab. Derivations, modules, and results will be added as my work advances.</p></div>
     </section>
   </div>
 
