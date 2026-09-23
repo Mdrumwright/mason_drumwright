@@ -53,6 +53,17 @@
   .note { font-family: var(--font-mono); font-size: 12px; color: var(--faint);
     border: 1px dashed var(--line-strong); border-radius: 10px; padding: 12px 16px; margin-top: 22px; }
 
+  .docs { display: grid; gap: 14px; margin-top: 22px; max-width: 68ch; }
+  .doc { display: flex; align-items: flex-start; gap: 16px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; text-decoration: none;
+    transition: transform .14s ease, border-color .14s ease; }
+  .doc:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .doc svg { flex: none; width: 26px; height: 26px; stroke: var(--accent); fill: none; margin-top: 2px; }
+  .doc .dt { color: var(--text); font-weight: 620; }
+  .doc .dd { color: var(--muted); font-size: 0.95rem; margin-top: 3px; }
+  .doc .dl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-top: 8px; }
+
   section { padding-block: clamp(40px, 6vw, 68px); border-top: 1px solid var(--line); }
   .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
   .sec-head .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
@@ -143,7 +154,7 @@
       <div class="grid three">
         <div class="card"><span class="tag">Leadership</span><h3>Leading D&amp;C</h3><p>Leading the Dynamics &amp; Controls team by outlining the GNC CONOPS, delegating tasks to team members, and working with the hardware team to develop a robust control system for the autonomous rover.</p></div>
         <div class="card"><span class="tag">Dynamics</span><h3>Rover simulation</h3><p>Simulating the dynamics for the rover design including the X-Y planar movement and the payload delivery mechanism by defining design requirements and deriving equations of motion to visualize motion using MATLAB/Python.</p></div>
-        <div class="card"><span class="tag">Control</span><h3>Precise delivery</h3><p>Building a control system capable of precise payload delivery and obstacle avoidance by performing trade studies of different control laws and implementing Optical Flow and LiDAR sensors to increase system reliability.</p></div>
+        <div class="card"><span class="tag">Control</span><h3>Precise delivery</h3><p>Building a control system capable of precise payload delivery and obstacle avoidance by performing trade studies of different control laws</p></div>
       </div>
     </section>
 
@@ -167,13 +178,47 @@
         <li><b>Equations of motion</b>: derive the rover's EOM for X–Y planar movement and the payload-delivery mechanism.</li>
         <li><b>Dynamics simulation</b>: model and visualize the rover's motion in MATLAB/Python from defined design requirements.</li>
         <li><b>Control laws</b>: trade studies of candidate control laws for precise, repeatable payload delivery.</li>
-        <li><b>Perception</b>: integrate Optical Flow and LiDAR sensors for obstacle avoidance and reliability.</li>
         <li><b>Autonomy &amp; override</b>: autonomous rover motion with a manual override available on every phase.</li>
       </ul>
     </section>
 
+    <section id="trades">
+      <div class="sec-head"><span class="idx">06</span><h2>Trade studies</h2></div>
+      <p class="lead">Key design decisions were made through formal trade studies, scoring each option against weighted criteria:</p>
+      <ul class="ticks">
+        <li><b>Control architecture</b>: PID vs. LQT vs. pure-pursuit, scored on path-tracking accuracy, computational cost, obstacle avoidance, and tuning complexity. LQT was selected (weighted score 4.2, ahead of PID at 4.1 and pursuit at 3.6).</li>
+        <li><b>Steering mechanism</b>: skid-steer vs. Ackerman, weighing modeling complexity, maneuverability, steering radius, and energy efficiency.</li>
+        <li><b>Number of wheels</b>: 2 vs. 4 vs. 6+ wheels, trading terrain mobility, traction, weight, and obstacle clearance — more wheels lowered peak per-wheel torque (from 2.5 N·m at 4 wheels to 1.25 N·m at 8).</li>
+        <li><b>Inertial reference point</b>: where the shared coordinate frame is anchored (base station vs. drone start), weighing reference loss, GPS dependence, and error accumulation.</li>
+      </ul>
+      <p class="lead" style="margin-top:20px">The selected LQT controller reached millimeter-level mean cross-track error over a 1,000-path Monte Carlo (nominal model, 0.5 m/s), and its gains follow automatically from the Q and R weights rather than manual tuning.</p>
+    </section>
+
+    <section id="docs">
+      <div class="sec-head"><span class="idx">07</span><h2>Design documents</h2></div>
+      <p class="lead">Technical write-ups of the rover dynamics and control design and its robustness analysis:</p>
+      <div class="docs">
+        <a class="doc" href="docs/Rover-Dynamics-and-Control.pdf" target="_blank" rel="noopener" download>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+          <div>
+            <div class="dt">Rover Dynamics &amp; LQT Path-Following Controller</div>
+            <div class="dd">Derivation of the planar skid-steer dynamics and the feedforward + LQR path-following controller, including sign conventions, the Riccati solve, and closed-loop tracking results.</div>
+            <div class="dl">Download PDF · 12 pages</div>
+          </div>
+        </a>
+        <a class="doc" href="docs/LQT-Monte-Carlo-Analysis.pdf" target="_blank" rel="noopener" download>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+          <div>
+            <div class="dt">Monte Carlo Robustness Analysis</div>
+            <div class="dd">Nominal (1,000-trial) and parameter-mismatch (500-trial) Monte Carlo studies identifying rolling resistance as the dominant error source, with recommended controller fixes.</div>
+            <div class="dl">Download PDF · 5 pages</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <section id="timeline">
-      <div class="sec-head"><span class="idx">06</span><h2>Timeline &amp; milestones</h2></div>
+      <div class="sec-head"><span class="idx">08</span><h2>Timeline &amp; milestones</h2></div>
       <p class="lead">The project runs across two semesters against a schedule of formal design reviews, each with a hard deadline. The design has to be presented, defended, and signed off before the team moves to the next phase:</p>
       <ol class="steps">
         <li><b>Conceptual design (CONOPS)</b>: lock in the concept of operations, requirements, and candidate architectures for the UAS and rover.</li>
